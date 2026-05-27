@@ -1,4 +1,5 @@
 import { motion } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Users } from 'lucide-react';
 
 const Hero = () => {
@@ -223,41 +224,42 @@ const Mission = () => {
 };
 
 const Programs = () => {
+  const navigate = useNavigate();
   const programs = [
     {
       title: "The Magnet School",
       description: "Our flagship program for deep intellectual growth, leadership, and character development.",
       icon: <Users className="w-6 h-6" />,
-      cta: "Join via WhatsApp",
-      link: "#magnet"
+      cta: "Explore Program",
+      slug: "the-magnet-school"
     },
     {
       title: "The Skill Hut",
       description: "Master high-income digital skills that the market actually demands. Practical, project-based learning.",
       icon: <ArrowRight className="w-6 h-6 rotate-[-45deg]" />,
-      cta: "Register Now",
-      link: "#skill-hut"
+      cta: "Explore Program",
+      slug: "the-skill-hut"
     },
     {
       title: "Cash On Campus",
       description: "Financial intelligence and entrepreneurship tailored for the modern student ecosystem.",
       icon: <ArrowRight className="w-6 h-6" />,
-      cta: "Learn More",
-      link: "#cash"
+      cta: "Explore Program",
+      slug: "cash-on-campus"
     },
     {
       title: "The Mental Application Study",
       description: "A deep dive into cognitive development, strategic thinking, and the psychology of execution.",
       icon: <ArrowRight className="w-6 h-6 rotate-90" />,
-      cta: "Apply Now",
-      link: "#mental"
+      cta: "Explore Program",
+      slug: "the-mental-application-study"
     },
     {
       title: "Crash Course",
       description: "Rapid-fire learning sessions designed to jumpstart your innovation journey and creative spark.",
       icon: <ArrowRight className="w-6 h-6 rotate-45" />,
-      cta: "Get Started",
-      link: "#crash"
+      cta: "Explore Program",
+      slug: "crash-course"
     }
   ];
 
@@ -303,6 +305,7 @@ const Programs = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
+              onClick={() => navigate(`/programs/${program.slug}`)}
               className="group relative p-8 bg-white border border-[#e8e5e0] rounded-2xl hover:border-[#F16736] hover:-translate-y-1 transition-all duration-300 ease-in-out cursor-pointer"
             >
               {/* Icon Container */}

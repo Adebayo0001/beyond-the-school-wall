@@ -1,9 +1,11 @@
 import { motion } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 import { Check, ArrowUpRight, MessageCircle, Library } from 'lucide-react';
 
 const programs = [
   {
     title: "The Magnet School",
+    slug: "the-magnet-school",
     kicker: "Leadership & Character",
     description: "Our flagship program designed for deep intellectual growth and character development. We focus on raising men and women of substance who can lead with clarity and purpose. Through rigorous study and community engagement, you'll develop the mental fortitude required for high-level leadership in the 21st century.",
     features: [
@@ -11,11 +13,12 @@ const programs = [
       "Intellectual Rigor & Critical Thinking",
       "High-Level Community Networking"
     ],
-    cta: "Enroll via WhatsApp",
+    cta: "Explore Syllabus & Archetypes",
     image: "https://picsum.photos/seed/magnet/800/600"
   },
   {
     title: "The Skill Hut",
+    slug: "the-skill-hut",
     kicker: "Digital Mastery",
     description: "Master high-income digital skills that the global market actually demands. From creative design to technical execution, we provide project-based learning that translates directly into economic value. Stop learning for grades and start learning for impact and income in a digital-first economy.",
     features: [
@@ -23,11 +26,12 @@ const programs = [
       "Project-Based Hands-on Learning",
       "Professional Portfolio Building"
     ],
-    cta: "Access the Study",
+    cta: "Explore Syllabus & Portfolio Kits",
     image: "https://picsum.photos/seed/skill/800/600"
   },
   {
     title: "Cash On Campus",
+    slug: "cash-on-campus",
     kicker: "Financial Intelligence",
     description: "Financial intelligence tailored specifically for the modern student ecosystem. We teach you how to build sustainable income streams while navigating your academic journey. Learn the principles of entrepreneurship, investment, and financial management that traditional school won't teach you.",
     features: [
@@ -35,11 +39,12 @@ const programs = [
       "Financial Intelligence & Management",
       "Sustainable Income Stream Strategy"
     ],
-    cta: "Start Earning",
+    cta: "Explore Syllabus & Calculator",
     image: "https://picsum.photos/seed/cash/800/600"
   },
   {
     title: "The Mental Application Study",
+    slug: "the-mental-application-study",
     kicker: "Cognitive Performance",
     description: "A deep dive into cognitive development and the psychology of execution. Understand how to optimize your brain for strategic thinking and complex problem-solving. This program is for those who want to master their minds and achieve peak performance in any field through mental discipline.",
     features: [
@@ -47,11 +52,12 @@ const programs = [
       "Strategic Thinking Frameworks",
       "Psychology of High-Performance Execution"
     ],
-    cta: "Apply Now",
+    cta: "Explore Syllabus & Tools",
     image: "https://picsum.photos/seed/mental/800/600"
   },
   {
     title: "Crash Course",
+    slug: "crash-course",
     kicker: "Rapid Innovation",
     description: "Rapid-fire learning sessions designed to jumpstart your innovation journey. These micro-degrees focus on specific, actionable insights that you can implement immediately. Perfect for the busy student who needs high-impact knowledge in a condensed timeframe to stay ahead of the curve.",
     features: [
@@ -59,13 +65,14 @@ const programs = [
       "Innovation Journey Jumpstart",
       "Micro-Degree Certification"
     ],
-    cta: "Get Started",
+    cta: "Explore Syllabus & Checklist",
     image: "https://picsum.photos/seed/crash/800/600"
   }
 ];
 
 const ProgramBlock = ({ program, index }: { program: typeof programs[0], index: number, key?: string }) => {
   const isEven = index % 2 === 0;
+  const navigate = useNavigate();
 
   return (
     <section className={`py-20 md:py-32 ${isEven ? 'bg-white' : 'bg-[#faf9f7]'} border-b border-[#e8e5e0]`}>
@@ -100,7 +107,10 @@ const ProgramBlock = ({ program, index }: { program: typeof programs[0], index: 
               ))}
             </ul>
 
-            <button className="group relative px-8 py-4 bg-[#F16736] text-white font-bold rounded-full overflow-hidden transition-all hover:shadow-[0_0_40px_rgba(241,103,54,0.3)] active:scale-95 flex items-center gap-2">
+            <button 
+              onClick={() => navigate(`/programs/${program.slug}`)}
+              className="group relative px-8 py-4 bg-[#F16736] text-white font-bold rounded-full overflow-hidden transition-all hover:shadow-[0_0_40px_rgba(241,103,54,0.3)] active:scale-95 flex items-center gap-2"
+            >
               <span className="relative z-10 flex items-center gap-2">
                 {program.cta} <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </span>
