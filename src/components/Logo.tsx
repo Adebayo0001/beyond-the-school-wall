@@ -5,12 +5,12 @@ interface LogoProps {
   textClassName?: string;
 }
 
-const Logo = ({ className = "h-10 w-auto", textClassName = "text-2xl" }: LogoProps) => {
+const Logo = ({ className = "h-10 w-auto", textClassName = "text-2xl text-[#1e1e1e]" }: LogoProps) => {
   const [imageError, setImageError] = useState(false);
 
   if (imageError) {
     return (
-      <span className={`${textClassName} font-extrabold tracking-tighter text-white flex items-center gap-2`}>
+      <span className={`${textClassName} font-extrabold tracking-tighter flex items-center gap-2`}>
         BTSW<span className="text-brand-orange">.</span>
       </span>
     );

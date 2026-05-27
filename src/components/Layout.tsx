@@ -25,7 +25,7 @@ const Layout = ({ children }: LayoutProps) => {
   }, [pathname, hash]);
 
   return (
-    <div className="bg-brand-dark min-h-screen selection:bg-brand-orange selection:text-white">
+    <div className="bg-white min-h-screen selection:bg-[#F16736] selection:text-white text-[#1e1e1e]">
       <Navbar />
       <main>
         {children}
