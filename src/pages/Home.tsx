@@ -5,11 +5,12 @@ import { ArrowRight, Users } from 'lucide-react';
 const Hero = () => {
   return (
     <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-white">
-      {/* Background Glows */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-[#F16736]/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#F16736]/5 rounded-full blur-[120px] pointer-events-none" />
+      {/* Background Glows and Grids */}
+      <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-[#F16736]/5 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-[#F16736]/5 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #1e1e1e 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
 
-      <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
         {/* Text Content */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -18,6 +19,16 @@ const Hero = () => {
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="z-10"
         >
+          {/* Node Connection Line Animation */}
+          <motion.div 
+            initial={{ width: 0 }} 
+            animate={{ width: 100 }} 
+            transition={{ duration: 1, delay: 0.5 }} 
+            className="hidden md:block absolute -left-12 top-10 h-[1px] bg-[#F16736]/30"
+          >
+            <div className="absolute right-0 -top-1 w-2 h-2 rounded-full border border-[#F16736] bg-white animate-ping" />
+          </motion.div>
+
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fff1eb] border border-[#F16736]/20 text-[#F16736] text-xs font-bold uppercase tracking-widest mb-6">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F16736] opacity-75"></span>
@@ -26,40 +37,45 @@ const Hero = () => {
             Beyond the School Wall
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-extrabold leading-[1.1] tracking-tight mb-6 text-[#1e1e1e]">
+          <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-extrabold leading-[1.05] tracking-tight mb-6 text-[#1e1e1e]">
             Equipping You With What{' '}
-            <span className="text-[#F16736] italic">School</span> Won't Teach.
+            <span className="text-[#F16736] italic relative inline-block">
+              School
+              <svg className="absolute -bottom-2 md:-bottom-4 left-0 w-full h-3 md:h-4 text-[#F16736]/20" viewBox="0 0 100 20" preserveAspectRatio="none">
+                <path d="M0 10 Q 50 20 100 10" fill="transparent" stroke="currentColor" strokeWidth="4" />
+              </svg>
+            </span> Won't Teach.
           </h1>
 
-          <p className="text-lg md:text-xl text-[#6b6b6b] max-w-xl mb-10 leading-relaxed">
+          <p className="text-lg md:text-xl text-[#6b6b6b] max-w-xl mb-10 leading-relaxed font-medium">
             Raising men for resourcefulness. A digital ecosystem built on{' '}
-            <span className="text-[#1e1e1e] font-semibold">Creativity</span>,{' '}
-            <span className="text-[#1e1e1e] font-semibold">Intelligence</span>, and{' '}
-            <span className="text-[#1e1e1e] font-semibold">Innovation</span>.
+            <span className="text-[#1e1e1e] font-bold">Creativity</span>,{' '}
+            <span className="text-[#1e1e1e] font-bold">Intelligence</span>, and{' '}
+            <span className="text-[#1e1e1e] font-bold">Innovation</span>.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
             <a 
               href="#join"
-              className="group relative px-8 py-4 bg-[#F16736] text-white font-bold rounded-full overflow-hidden transition-all hover:shadow-[0_0_40px_rgba(241,103,54,0.3)] active:scale-95 text-center"
+              className="group relative px-8 py-4 bg-[#F16736] text-white font-bold rounded-full overflow-hidden transition-all hover:shadow-[0_0_40px_rgba(241,103,54,0.3)] active:scale-95 text-center flex items-center justify-center gap-2"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 Join the Community <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </span>
               <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             </a>
-            <button className="px-8 py-4 bg-transparent text-[#1e1e1e] font-bold rounded-full border border-[#e8e5e0] hover:bg-[#faf9f7] transition-all">
+            <button className="px-8 py-4 bg-transparent text-[#1e1e1e] font-bold rounded-full border border-[#e8e5e0] hover:bg-[#faf9f7] hover:border-[#F16736]/30 transition-all">
               Learn More
             </button>
           </div>
 
           {/* Social Proof */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="flex -space-x-3">
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className="w-10 h-10 rounded-full border-2 border-white bg-neutral-100 flex items-center justify-center overflow-hidden"
+                  className="w-12 h-12 rounded-full border-[3px] border-white bg-neutral-100 flex items-center justify-center overflow-hidden shadow-sm"
                 >
                   <img
                     src={`https://picsum.photos/seed/user${i}/100/100`}
@@ -69,16 +85,16 @@ const Hero = () => {
                   />
                 </div>
               ))}
-              <div className="w-10 h-10 rounded-full border-2 border-white bg-[#F16736] flex items-center justify-center text-[10px] font-bold text-white">
+              <div className="w-12 h-12 rounded-full border-[3px] border-white bg-[#F16736] flex items-center justify-center text-[11px] font-black tracking-tighter text-white shadow-sm">
                 +5k
               </div>
             </div>
             <div className="flex flex-col">
-              <div className="flex items-center gap-1">
-                <Users size={14} className="text-[#F16736]" />
-                <span className="text-sm font-bold text-[#1e1e1e]">Join 5,000+</span>
+              <div className="flex items-center gap-1.5">
+                <Users size={16} className="text-[#F16736]" />
+                <span className="text-base font-bold text-[#1e1e1e]">Join 5,000+</span>
               </div>
-              <span className="text-xs text-[#6b6b6b] uppercase tracking-wider">Resourceful Minds</span>
+              <span className="text-xs font-bold text-[#6b6b6b] uppercase tracking-[0.2em] mt-0.5">Resourceful Minds</span>
             </div>
           </div>
         </motion.div>
@@ -89,36 +105,47 @@ const Hero = () => {
           whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.2 }}
-          className="relative hidden lg:block bg-[#fff1eb] p-6 rounded-[2.5rem]"
+          className="relative hidden lg:block p-8"
         >
-          <div className="relative aspect-square rounded-3xl overflow-hidden border border-[#e8e5e0] shadow-2xl">
-            <img
-              src="https://picsum.photos/seed/climbing/800/800"
-              alt="Climbing to success"
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-              referrerPolicy="no-referrer"
-            />
-            {/* Overlay Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-white/40 via-transparent to-transparent opacity-60" />
-            
-            {/* Floating Card UI */}
-            <motion.div 
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute bottom-8 left-8 right-8 p-6 bg-white border border-[#e8e5e0] rounded-2xl shadow-xl"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-xs font-bold uppercase tracking-widest text-[#F16736]">Active Session</span>
-                <span className="text-[10px] text-[#6b6b6b]">Live Now</span>
+          <div className="relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-[#e8e5e0] shadow-2xl group bg-white p-4">
+            <div className="relative w-full h-full rounded-[1.5rem] overflow-hidden">
+              <img
+                src="https://picsum.photos/seed/climbing/800/1000"
+                alt="Climbing to success"
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                referrerPolicy="no-referrer"
+              />
+              {/* Overlay Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-80" />
+              
+              {/* Tech Node Overlay Elements */}
+              <div className="absolute inset-0 border border-[#F16736]/20 rounded-[1.5rem] m-4 pointer-events-none">
+                <div className="absolute -top-1 -left-1 w-2 h-2 bg-[#F16736]" />
+                <div className="absolute -bottom-1 -right-1 w-2 h-2 bg-[#F16736]" />
               </div>
-              <h3 className="text-xl font-bold mb-2 text-[#1e1e1e]">Creative Intelligence 101</h3>
-              <p className="text-sm text-[#6b6b6b]">Mastering the art of resourcefulness in a digital age.</p>
-            </motion.div>
+
+              {/* Floating Card UI */}
+              <motion.div 
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute bottom-6 left-6 right-6 p-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-[#F16736] animate-pulse" />
+                    <span className="text-xs font-black uppercase tracking-widest text-[#F16736]">Active Session</span>
+                  </div>
+                  <span className="text-[10px] font-mono text-white/70 uppercase">Live Now</span>
+                </div>
+                <h3 className="text-xl font-bold mb-2 text-white">Creative Intelligence 101</h3>
+                <p className="text-sm text-white/80 font-medium">Mastering the art of resourcefulness in a digital age.</p>
+              </motion.div>
+            </div>
           </div>
 
           {/* Decorative Elements */}
-          <div className="absolute -top-6 -right-6 w-24 h-24 bg-[#F16736]/15 rounded-full blur-2xl pointer-events-none" />
-          <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#F16736]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-32 h-32 bg-[#F16736]/10 rounded-full blur-[40px] pointer-events-none" />
+          <div className="absolute bottom-10 -left-10 w-48 h-48 bg-[#F16736]/15 rounded-full blur-[60px] pointer-events-none" />
         </motion.div>
       </div>
     </section>
@@ -306,29 +333,46 @@ const Programs = () => {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               onClick={() => navigate(`/programs/${program.slug}`)}
-              className="group relative p-8 bg-white border border-[#e8e5e0] rounded-2xl hover:border-[#F16736] hover:-translate-y-1 transition-all duration-300 ease-in-out cursor-pointer"
+              className={`group relative p-8 bg-white border border-[#e8e5e0] rounded-[2rem] overflow-hidden hover:border-[#F16736] hover:-translate-y-1 hover:shadow-xl transition-all duration-500 ease-in-out cursor-pointer flex flex-col justify-between ${
+                index === 0 ? 'md:col-span-2' : ''
+              }`}
             >
-              {/* Icon Container */}
-              <div className="w-12 h-12 rounded-xl bg-[#fff1eb] border border-[#F16736]/10 flex items-center justify-center text-[#F16736] mb-6 group-hover:bg-[#F16736] group-hover:text-white transition-colors duration-300">
-                {program.icon}
+              {/* Intelligent Background Visuals */}
+              <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-10 transition-opacity duration-700 pointer-events-none">
+                <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                  <path d="M60 0L60 120M0 60L120 60" stroke="#F16736" strokeWidth="2" strokeDasharray="4 4" />
+                  <circle cx="60" cy="60" r="40" stroke="#F16736" strokeWidth="2" strokeDasharray="4 4" />
+                </svg>
               </div>
 
-              {/* Content */}
-              <h3 className="text-xl font-bold text-[#1e1e1e] mb-3 group-hover:text-[#F16736] transition-colors">
-                {program.title}
-              </h3>
-              <p className="text-[#6b6b6b] text-sm leading-relaxed mb-8 line-clamp-2">
-                {program.description}
-              </p>
+              <div>
+                {/* Icon Container */}
+                <div className="w-14 h-14 rounded-2xl bg-[#fff1eb] border border-[#F16736]/10 flex items-center justify-center text-[#F16736] mb-8 group-hover:scale-110 group-hover:bg-[#F16736] group-hover:text-white transition-all duration-300">
+                  {program.icon}
+                </div>
+
+                {/* Content */}
+                <h3 className={`font-bold text-[#1e1e1e] mb-4 group-hover:text-[#F16736] transition-colors ${index === 0 ? 'text-3xl' : 'text-2xl'}`}>
+                  {program.title}
+                </h3>
+                <p className="text-[#6b6b6b] text-base leading-relaxed mb-10 max-w-lg">
+                  {program.description}
+                </p>
+              </div>
 
               {/* CTA */}
-              <div className="flex items-center gap-2 text-sm font-bold text-[#1e1e1e] group-hover:text-[#F16736] transition-colors">
-                {program.cta}
-                <ArrowRight size={16} className="rotate-[-45deg] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              <div className="flex items-center gap-2 text-sm font-bold text-[#1e1e1e] group-hover:text-[#F16736] transition-colors mt-auto">
+                <span className="relative">
+                  {program.cta}
+                  <span className="absolute left-0 bottom-0 w-full h-[2px] bg-[#F16736] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+                </span>
+                <div className="w-6 h-6 rounded-full bg-[#f4f4f4] flex items-center justify-center group-hover:bg-[#fff1eb] transition-colors">
+                  <ArrowRight size={14} className="rotate-[-45deg] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </div>
               </div>
 
               {/* Subtle Glow on Hover */}
-              <div className="absolute inset-0 bg-[#F16736]/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#F16736]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             </motion.div>
           ))}
         </div>

@@ -3,7 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   ArrowLeft, Check, Calendar, Clock, Users, ArrowUpRight, 
-  MessageCircle, Coins, Award, Sparkles, Dumbbell, ShieldCheck, Zap
+  MessageCircle, Coins, Award, Sparkles, Dumbbell, ShieldCheck, Zap,
+  PlayCircle, FileText, CheckCircle2, Play, ArrowRight
 } from 'lucide-react';
 import { ProgramDetailData } from '../types';
 
@@ -596,6 +597,13 @@ const CrashChecklist = () => {
 const ProgramDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const [activeWeek, setActiveWeek] = useState<number>(0);
+  const [completedModules, setCompletedModules] = useState<number[]>([0]);
+
+  const handleComplete = (idx: number) => {
+    if (!completedModules.includes(idx)) {
+      setCompletedModules([...completedModules, idx]);
+    }
+  };
 
   // Fallback to magnet-school if slug not found
   const program = programDetails[slug || 'the-magnet-school'] || programDetails['the-magnet-school'];
@@ -624,34 +632,48 @@ const ProgramDetail = () => {
       <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#F16736]/5 rounded-full blur-[120px] pointer-events-none" />
 
       {/* Header Breadcrumbs / Custom Top Nav bar spacing */}
-      <header className="pt-28 md:pt-36 pb-12 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
+      <header className="pt-28 md:pt-36 pb-16 bg-white relative overflow-hidden">
+        {/* Creative Intelligence Overlays */}
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #1e1e1e 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+        
+        {/* Connecting line */}
+        <motion.div 
+          initial={{ height: 0 }} 
+          animate={{ height: '100%' }} 
+          transition={{ duration: 1.5, ease: 'easeInOut' }} 
+          className="absolute left-6 md:left-[10%] top-0 w-[1px] bg-gradient-to-b from-[#F16736]/30 to-transparent z-0 hidden md:block"
+        >
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full border border-[#F16736] bg-white animate-ping" />
+        </motion.div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
           <Link 
             to="/programs" 
-            className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-[#6b6b6b] hover:text-[#F16736] transition-colors mb-8 group"
+            className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-[#6b6b6b] hover:text-[#F16736] transition-colors mb-10 group bg-white/80 backdrop-blur-sm p-2 rounded-lg border border-[#e8e5e0]"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Curriculum
           </Link>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
             <div className="lg:col-span-8">
-              <span className="text-[#F16736] text-xs font-black uppercase tracking-[0.3em] mb-4 block">
+              <span className="text-[#F16736] text-xs font-black uppercase tracking-[0.3em] mb-6 block flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#F16736] animate-pulse" />
                 {program.kicker}
               </span>
-              <h1 className="text-4xl md:text-6xl font-black text-[#1e1e1e] leading-[1.1] mb-6 tracking-tight">
+              <h1 className="text-4xl md:text-6xl lg:text-[4.5rem] font-black text-[#1e1e1e] leading-[1.05] mb-8 tracking-tight">
                 {program.title}
               </h1>
-              <p className="text-lg md:text-xl text-[#6b6b6b] leading-relaxed font-medium">
+              <p className="text-lg md:text-xl xl:text-2xl text-[#6b6b6b] leading-relaxed font-medium max-w-3xl">
                 {program.intro}
               </p>
             </div>
 
-            <div className="lg:col-span-4 flex flex-wrap gap-3">
-              <div className="px-4 py-2 bg-[#faf9f7] border border-[#e8e5e0] rounded-full flex items-center gap-2 text-xs font-bold text-neutral-600">
-                <Clock className="w-3.5 h-3.5 text-[#F16736]" /> {program.duration}
+            <div className="lg:col-span-4 flex flex-wrap gap-4 pb-4">
+              <div className="px-5 py-3 bg-[#faf9f7] border border-[#e8e5e0] rounded-2xl flex items-center gap-3 text-xs md:text-sm font-bold text-neutral-600 shadow-sm transition-all hover:border-[#F16736]/30 hover:shadow-md">
+                <Clock className="w-4 h-4 text-[#F16736]" /> {program.duration}
               </div>
-              <div className="px-4 py-2 bg-[#faf9f7] border border-[#e8e5e0] rounded-full flex items-center gap-2 text-xs font-bold text-neutral-600">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#F16736]" /> {program.difficulty}
+              <div className="px-5 py-3 bg-[#faf9f7] border border-[#e8e5e0] rounded-2xl flex items-center gap-3 text-xs md:text-sm font-bold text-neutral-600 shadow-sm transition-all hover:border-[#F16736]/30 hover:shadow-md">
+                <ShieldCheck className="w-4 h-4 text-[#F16736]" /> {program.difficulty}
               </div>
             </div>
           </div>
@@ -688,57 +710,160 @@ const ProgramDetail = () => {
         </div>
       </section>
 
-      {/* Curriculum Breakdown Panel */}
-      <section className="py-24 border-b border-[#e8e5e0] bg-white">
+      {/* Khan Academy Inspired Curriculum Panel */}
+      <section className="py-24 border-b border-[#e8e5e0] bg-[#faf9f7]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="text-[#F16736] text-xs font-black uppercase tracking-[0.3em] mb-4 block">COURSE PROGRESSION</span>
-            <h2 className="text-3xl md:text-5xl font-black text-[#1e1e1e] tracking-tight">Step-by-Step Curriculum Syllabus</h2>
-            <p className="text-[#6b6b6b] max-w-xl mx-auto mt-4 text-sm md:text-base">
-              A carefully structured timeline designed to compound knowledge and ensure deep cognitive retention. Select a module to see detail.
-            </p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-[#e8e5e0] pb-8">
+            <div>
+              <span className="text-[#F16736] text-xs font-black uppercase tracking-[0.3em] mb-4 block">COURSE SYLLABUS</span>
+              <h2 className="text-3xl md:text-5xl font-black text-[#1e1e1e] tracking-tight">Learning Pathway</h2>
+            </div>
+            
+            {/* Progress Tracker */}
+            <div className="mt-6 md:mt-0 text-right">
+              <div className="flex items-center gap-4 justify-end mb-2">
+                <div className="text-right">
+                  <span className="text-xs font-bold text-neutral-500 uppercase tracking-widest block">Mastery Progress</span>
+                  <span className="text-2xl font-black text-[#1e1e1e]">{Math.round((completedModules.length / program.curriculum.length) * 100)}%</span>
+                </div>
+                <div className="w-12 h-12 rounded-full border-4 border-[#e8e5e0] border-t-[#F16736] flex items-center justify-center">
+                  <Award className="w-5 h-5 text-[#F16736]" />
+                </div>
+              </div>
+              <div className="w-48 h-2 bg-[#e8e5e0] rounded-full overflow-hidden ml-auto">
+                <div 
+                  className="h-full bg-[#F16736] transition-all duration-500 ease-out" 
+                  style={{ width: `${(completedModules.length / program.curriculum.length) * 100}%` }}
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            {/* Week Tabs Selector */}
-            <div className="lg:col-span-4 flex flex-col gap-2">
-              {program.curriculum.map((item, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setActiveWeek(idx)}
-                  className={`p-5 text-left rounded-2xl border transition-all duration-200 ${activeWeek === idx ? 'border-[#F16736] bg-[#fff1eb]/30 shadow-sm' : 'border-[#e8e5e0] hover:border-[#6b6b6b]'}`}
-                >
-                  <span className="text-xs font-extrabold text-[#F16736] uppercase tracking-[0.2em] block mb-1">{item.week}</span>
-                  <p className="font-extrabold text-[#1e1e1e] text-sm leading-tight">{item.title}</p>
-                </button>
-              ))}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            {/* Sidebar Modules (Khan Academy Style) */}
+            <div className="lg:col-span-4 flex flex-col gap-3 sticky top-32">
+              <h3 className="text-sm font-black text-[#1e1e1e] uppercase tracking-widest mb-2 px-2">Course Units</h3>
+              {program.curriculum.map((item, idx) => {
+                const isCompleted = completedModules.includes(idx);
+                const isActive = activeWeek === idx;
+                
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveWeek(idx)}
+                    className={`flex items-start gap-4 p-4 text-left rounded-2xl transition-all duration-200 border-2 ${
+                      isActive 
+                        ? 'border-[#F16736] bg-white shadow-md' 
+                        : 'border-transparent hover:bg-white hover:border-[#e8e5e0]'
+                    }`}
+                  >
+                    <div className={`mt-0.5 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+                      isCompleted ? 'bg-[#F16736] text-white' : isActive ? 'border-2 border-[#F16736] text-[#F16736]' : 'border-2 border-[#d0ccc5] text-[#d0ccc5]'
+                    }`}>
+                      {isCompleted ? <Check size={14} strokeWidth={4} /> : <span className="text-[10px] font-bold">{idx + 1}</span>}
+                    </div>
+                    <div>
+                      <span className={`text-[10px] font-black uppercase tracking-[0.2em] block mb-1 ${isActive ? 'text-[#F16736]' : 'text-neutral-500'}`}>
+                        {item.week}
+                      </span>
+                      <p className={`font-bold text-sm leading-tight ${isActive ? 'text-[#1e1e1e]' : 'text-neutral-600'}`}>
+                        {item.title}
+                      </p>
+                      
+                      {/* Micro lesson indicators */}
+                      <div className="flex items-center gap-2 mt-3">
+                        {item.topics.map((_, i) => (
+                          <div key={i} className={`w-1.5 h-1.5 rounded-full ${isCompleted ? 'bg-[#F16736]' : isActive ? 'bg-[#F16736]/40' : 'bg-[#e8e5e0]'}`} />
+                        ))}
+                      </div>
+                    </div>
+                  </button>
+                )
+              })}
             </div>
 
-            {/* Selected Module Detail view */}
-            <div className="lg:col-span-8 bg-[#faf9f7] p-8 md:p-12 border border-[#e8e5e0] rounded-3xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#F16736]/5 rounded-full blur-3xl pointer-events-none" />
+            {/* Video & Content Area (Khan Academy Style) */}
+            <div className="lg:col-span-8 bg-white border border-[#e8e5e0] rounded-[2.5rem] overflow-hidden shadow-sm">
+              {/* Video Player Mock */}
+              <div className="relative aspect-video bg-[#1e1e1e] group cursor-pointer overflow-hidden flex items-center justify-center">
+                <img 
+                  src={`https://picsum.photos/seed/${program.slug}-${activeWeek}/1200/600`}
+                  alt="Video thumbnail"
+                  className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-50 transition-opacity duration-500"
+                />
+                
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1e1e1e] via-transparent to-transparent opacity-80" />
+                
+                <div className="relative z-10 w-20 h-20 rounded-full bg-[#F16736] flex items-center justify-center pl-2 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_40px_rgba(241,103,54,0.4)]">
+                  <Play className="w-8 h-8 text-white" fill="currentColor" />
+                </div>
+                
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white/80 text-xs font-mono">
+                  <span>► 0:00 / 14:32</span>
+                  <div className="flex items-center gap-3">
+                    <span className="px-2 py-1 rounded bg-white/10 uppercase tracking-widest text-[10px]">CC</span>
+                    <span className="px-2 py-1 rounded bg-white/10 uppercase tracking-widest text-[10px]">1080p</span>
+                  </div>
+                </div>
+              </div>
               
-              <span className="text-xs font-extrabold text-[#F16736] bg-[#fff1eb] border border-[#F16736]/10 px-3 py-1.5 rounded-full tracking-wider block w-max mb-6">
-                Active Study: {program.curriculum[activeWeek].week}
-              </span>
+              <div className="p-8 md:p-12">
+                <span className="text-xs font-black text-[#F16736] bg-[#fff1eb] border border-[#F16736]/10 px-4 py-2 rounded-full tracking-widest inline-block mb-6 shadow-sm">
+                  {program.curriculum[activeWeek].week}
+                </span>
 
-              <h3 className="text-2xl font-black text-[#1e1e1e] mb-4">
-                {program.curriculum[activeWeek].title}
-              </h3>
-              <p className="text-[#6b6b6b] text-base leading-relaxed mb-8">
-                {program.curriculum[activeWeek].description}
-              </p>
+                <h3 className="text-3xl md:text-4xl font-black text-[#1e1e1e] mb-6 tracking-tight">
+                  {program.curriculum[activeWeek].title}
+                </h3>
+                <p className="text-[#6b6b6b] text-base md:text-lg leading-relaxed mb-10 font-medium max-w-3xl">
+                  {program.curriculum[activeWeek].description}
+                </p>
 
-              <div>
-                <span className="text-xs font-black uppercase tracking-[0.2em] text-[#1e1e1e] block mb-4">Syllabus Core Topics:</span>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {/* Lesson Topics as "Practice/Articles" */}
+                <div className="space-y-4 mb-10">
+                  <h4 className="text-sm font-black text-[#1e1e1e] uppercase tracking-widest border-b border-[#e8e5e0] pb-4 mb-6">Unit Lessons & Practice</h4>
+                  
                   {program.curriculum[activeWeek].topics.map((t, index) => (
-                    <li key={index} className="flex items-center gap-3 text-xs md:text-sm font-semibold text-neutral-700 bg-white p-3 rounded-xl border border-[#e8e5e0]">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#F16736] flex-shrink-0" />
-                      {t}
-                    </li>
+                    <button key={index} className="w-full flex items-center justify-between p-4 rounded-xl border border-[#e8e5e0] hover:border-[#F16736] hover:shadow-md transition-all group bg-white text-left">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full bg-[#faf9f7] flex items-center justify-center text-[#6b6b6b] group-hover:text-[#F16736] transition-colors">
+                          {index % 3 === 0 ? <PlayCircle size={20} /> : index % 3 === 1 ? <FileText size={20} /> : <Dumbbell size={20} />}
+                        </div>
+                        <div>
+                          <p className="font-bold text-[#1e1e1e] text-sm md:text-base group-hover:text-[#F16736] transition-colors">{t}</p>
+                          <p className="text-xs text-neutral-500 mt-1 font-medium">
+                            {index % 3 === 0 ? 'Video Lesson • 8 mins' : index % 3 === 1 ? 'Reading • 4 mins read' : 'Practice Exercise • 50 Mastery Points'}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-[#F16736] font-bold text-xs uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity hidden sm:block">Start</span>
+                    </button>
                   ))}
-                </ul>
+                </div>
+                
+                {/* Completion Action */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-8 border-t border-[#e8e5e0] gap-4">
+                  <button 
+                    onClick={() => handleComplete(activeWeek)}
+                    disabled={completedModules.includes(activeWeek)}
+                    className={`px-8 py-4 rounded-full font-bold transition-all flex items-center justify-center gap-3 w-full sm:w-auto ${
+                      completedModules.includes(activeWeek) 
+                        ? 'bg-neutral-100 text-neutral-400 cursor-not-allowed' 
+                        : 'bg-[#1e1e1e] hover:bg-[#F16736] text-white hover:shadow-lg hover:-translate-y-1'
+                    }`}
+                  >
+                     {completedModules.includes(activeWeek) ? 'Unit Mastered' : 'Master This Unit'} <CheckCircle2 size={18} className={completedModules.includes(activeWeek) ? "text-neutral-400" : "text-white"} />
+                  </button>
+                  
+                  {activeWeek < program.curriculum.length - 1 && (
+                    <button 
+                      onClick={() => setActiveWeek(prev => prev + 1)}
+                      className="text-sm font-bold text-[#F16736] hover:underline flex items-center justify-center gap-1 w-full sm:w-auto"
+                    >
+                      Next Unit <ArrowRight size={16} />
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -746,27 +871,38 @@ const ProgramDetail = () => {
       </section>
 
       {/* Call to action cohort match block */}
-      <section className="py-24 bg-[#faf9f7]">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#fff1eb] border border-[#F16736]/20 text-[#F16736] text-xs font-black uppercase tracking-wider mb-8">
-            <Users size={12} /> {program.cohortDate}
+      <section className="py-32 bg-[#1e1e1e] relative overflow-hidden">
+        {/* Animated Background Glow */}
+        <motion.div 
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#F16736]/10 rounded-full blur-[100px] pointer-events-none" 
+        />
+        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+
+        <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white text-xs font-black uppercase tracking-wider mb-8 backdrop-blur-sm">
+            <Users size={12} className="text-[#F16736]" /> {program.cohortDate}
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-[#1e1e1e] mb-6 tracking-tight">
-            Ready to rewrite the rules <br />of student success?
+          <h2 className="text-4xl md:text-6xl font-black text-white mb-8 tracking-tight leading-tight">
+            Ready to rewrite the rules <br className="hidden md:block" />of student success?
           </h2>
-          <p className="text-[#6b6b6b] text-base md:text-lg mb-12 leading-relaxed">
+          <p className="text-white/70 text-lg md:text-xl xl:text-2xl mb-12 leading-relaxed font-medium max-w-2xl mx-auto">
             Apply today to secure a slot in our next cohort. Meet our leadership, receive immediate starter digital resources, and start executing beyond school limits.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="w-full sm:w-auto group relative px-10 py-5 bg-[#F16736] text-white font-black rounded-full overflow-hidden transition-all hover:shadow-[0_0_40px_rgba(241,103,54,0.3)] active:scale-95 flex items-center justify-center gap-3">
-              <span className="relative z-10 flex items-center gap-2">
-                {program.cta} <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+            <button className="w-full sm:w-auto md:w-auto group relative px-10 py-5 xl:px-12 xl:py-6 bg-[#F16736] text-white text-lg font-black rounded-full overflow-hidden transition-all hover:shadow-[0_0_50px_rgba(241,103,54,0.4)] active:scale-95 flex items-center justify-center gap-3 hover:scale-105">
+              <span className="relative z-10 flex items-center gap-3">
+                {program.cta} <ArrowUpRight size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </span>
-              <div className="absolute inset-0 bg-[#1e1e1e] translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             </button>
-            <button className="w-full sm:w-auto px-10 py-5 bg-transparent border border-[#e8e5e0] hover:bg-white text-neutral-800 font-bold rounded-full transition-all flex items-center justify-center gap-2">
-              <MessageCircle size={18} className="text-[#F16736]" /> Inquire via Telegram
+            <button className="w-full sm:w-auto md:w-auto px-10 py-5 xl:px-12 xl:py-6 bg-transparent border border-white/20 hover:bg-white/10 text-white font-bold rounded-full transition-all flex items-center justify-center gap-3 backdrop-blur-sm">
+              <MessageCircle size={20} className="text-[#F16736]" /> Inquire via Telegram
             </button>
           </div>
         </div>

@@ -126,17 +126,33 @@ const ProgramBlock = ({ program, index }: { program: typeof programs[0], index: 
             transition={{ duration: 1, delay: 0.2 }}
             className="flex-1 w-full"
           >
-            <div className={`relative aspect-[4/3] rounded-3xl overflow-hidden border border-[#e8e5e0] shadow-xl group bg-[#fff1eb] p-2`}>
-              <img 
-                src={program.image} 
-                alt={program.title}
-                className="w-full h-full object-cover rounded-2xl grayscale group-hover:grayscale-0 transition-all duration-700"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent opacity-40 pointer-events-none" />
+            <div className={`relative aspect-[4/3] rounded-3xl overflow-hidden border border-[#e8e5e0] shadow-xl group bg-white p-4`}>
+              <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                <img 
+                  src={program.image} 
+                  alt={program.title}
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent opacity-40 pointer-events-none" />
+                
+                {/* Advanced Tech Overlay */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                  {/* Subtle grid on hover */}
+                  <div className="w-full h-full" style={{ backgroundImage: 'radial-gradient(circle, #F16736 1px, transparent 1px)', backgroundSize: '32px 32px', opacity: 0.2 }} />
+                  
+                  {/* Floating connection lines */}
+                  <div className="absolute top-1/4 left-1/4 w-32 h-[1px] bg-gradient-to-r from-[#F16736] to-transparent rotate-45 transform origin-left" />
+                  <div className="absolute bottom-1/4 right-1/4 w-32 h-[1px] bg-gradient-to-r from-transparent to-[#F16736] rotate-[-45deg] transform origin-right" />
+                  <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 border border-[#F16736]/30 bg-[#F16736]/10 backdrop-blur-sm rounded flex items-center justify-center animate-pulse`}>
+                    <div className="w-1.5 h-1.5 bg-[#F16736] rounded-full" />
+                  </div>
+                </div>
+              </div>
               
               {/* Decorative Accent */}
-              <div className={`absolute ${isEven ? '-top-4 -right-4' : '-top-4 -left-4'} w-24 h-24 bg-[#F16736]/10 rounded-full blur-2xl pointer-events-none`} />
+              <div className={`absolute ${isEven ? '-top-4 -right-4' : '-top-4 -left-4'} w-32 h-32 bg-[#F16736]/10 rounded-full blur-[40px] pointer-events-none`} />
+              <div className={`absolute ${isEven ? '-bottom-4 -left-4' : '-bottom-4 -right-4'} w-24 h-24 bg-[#F16736]/5 rounded-full blur-[40px] pointer-events-none`} />
             </div>
           </motion.div>
         </div>
