@@ -24,13 +24,22 @@ const Layout = ({ children }: LayoutProps) => {
     }
   }, [pathname, hash]);
 
+  // Determine if this is a custom workspace page (Portal, Admin, Luminaire, login/register)
+  const isWorkspace = 
+    pathname.startsWith('/portal') || 
+    pathname.startsWith('/admin') || 
+    pathname.startsWith('/luminaire') || 
+    pathname === '/login' || 
+    pathname === '/register' ||
+    pathname === '/luminaire/login';
+
   return (
     <div className="bg-white min-h-screen selection:bg-[#F16736] selection:text-white text-[#1e1e1e]">
-      <Navbar />
+      {!isWorkspace && <Navbar />}
       <main>
         {children}
       </main>
-      <Footer />
+      {!isWorkspace && <Footer />}
     </div>
   );
 };

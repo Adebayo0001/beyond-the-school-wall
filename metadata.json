@@ -1,5 +1,6 @@
 {
-  "name": "Remix: Remix: Beyond the School Wall (BTSW)",
-  "description": "Equipping students with what traditional schooling won\u0027t teach. Focusing on Creativity, Intelligence, and Innovation.",
-  "requestFramePermissions": []
+  "name": "Beyond the School Wall (BTSW)",
+  "description": "Equipping students with what traditional schooling won't teach. Focusing on Creativity, Intelligence, and Innovation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
