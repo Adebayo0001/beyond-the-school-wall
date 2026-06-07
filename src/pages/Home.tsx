@@ -1,6 +1,8 @@
+import React, { useRef, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Users } from 'lucide-react';
+import * as THREE from 'three';
 
 const Hero = () => {
   return (
@@ -599,87 +601,402 @@ const FinalCTA = () => {
 
 const EchelonProjectSection = () => {
   const navigate = useNavigate();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    if (!canvasRef.current || !containerRef.current) return;
+
+    const container = containerRef.current;
+    const canvas = canvasRef.current;
+
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    const isMobile = window.innerWidth < 768;
+
+    // 1. Scene setup
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color('#1e1e1e');
+    scene.fog = new THREE.FogExp2('#1e1e1e', 0.04);
+
+    // 2. Camera
+    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
+    camera.position.set(0, 0, 8);
+
+    // 3. Renderer
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: false,
+      powerPreference: "high-performance"
+    });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // 4. Lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.25);
+    scene.add(ambientLight);
+
+    const pointLight = new THREE.PointLight(0xF16736, 1.8, 40);
+    pointLight.position.set(0, 0, 5);
+    scene.add(pointLight);
+
+    const dirLight = new THREE.DirectionalLight(0xF16736, 0.8);
+    dirLight.position.set(5, 5, 5);
+    scene.add(dirLight);
+
+    // 5. Central Focal Hero Object (Rotating icosahedron with orange emissive glow)
+    const heroGroup = new THREE.Group();
+    
+    // Large icosahedron
+    const heroGeom = new THREE.IcosahedronGeometry(1.6, 0);
+    
+    // Solid core with glowing edge/specular properties
+    const heroCoreMat = new THREE.MeshPhongMaterial({
+      color: 0x121212,
+      emissive: 0x4d1604, // glowing orange emissive
+      specular: 0xF16736,
+      shininess: 90,
+      flatShading: true
+    });
+    const heroCore = new THREE.Mesh(heroGeom, heroCoreMat);
+    heroGroup.add(heroCore);
+
+    // Outer wireframe shell for technological feel
+    const heroOuterGeom = new THREE.IcosahedronGeometry(1.72, 1);
+    const heroOuterMat = new THREE.MeshBasicMaterial({
+      color: 0xF16736,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.35
+    });
+    const heroOuter = new THREE.Mesh(heroOuterGeom, heroOuterMat);
+    heroGroup.add(heroOuter);
+    
+    scene.add(heroGroup);
+
+    // 6. Floating shapes (icosahedrons, octahedrons, and wireframe cubes)
+    const numShapes = isMobile ? 5 : 14;
+    const shapes: Array<{
+      mesh: THREE.Object3D;
+      rotSpeedX: number;
+      rotSpeedY: number;
+      rotSpeedZ: number;
+      swimSpeed: number;
+      swimAmp: number;
+      initialY: number;
+    }> = [];
+
+    for (let i = 0; i < numShapes; i++) {
+      let geom: THREE.BufferGeometry;
+      const type = i % 3;
+      const size = 0.3 + Math.random() * 0.45;
+
+      if (type === 0) {
+        geom = new THREE.IcosahedronGeometry(size, 0);
+      } else if (type === 1) {
+        geom = new THREE.OctahedronGeometry(size, 0);
+      } else {
+        geom = new THREE.BoxGeometry(size, size, size);
+      }
+
+      const isWireframe = i % 2 === 0;
+      let mesh: THREE.Object3D;
+
+      if (isWireframe) {
+        // Pure orange wireframe shape
+        const wireMat = new THREE.MeshBasicMaterial({
+          color: 0xF16736,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.8
+        });
+        mesh = new THREE.Mesh(geom, wireMat);
+      } else {
+        // Solid structure with dark body & orange edge glow
+        const shpGroup = new THREE.Group();
+        const shpCoreMat = new THREE.MeshPhongMaterial({
+          color: 0x1e1e1e,
+          emissive: 0x100400,
+          specular: 0xF16736,
+          shininess: 30,
+          flatShading: true
+        });
+        const shpCore = new THREE.Mesh(geom, shpCoreMat);
+        
+        const edges = new THREE.EdgesGeometry(geom);
+        const lineMat = new THREE.LineBasicMaterial({
+          color: 0xF16736,
+          transparent: true,
+          opacity: 0.95
+        });
+        const shpEdges = new THREE.LineSegments(edges, lineMat);
+        shpEdges.scale.setScalar(1.02);
+
+        shpGroup.add(shpCore);
+        shpGroup.add(shpEdges);
+        mesh = shpGroup;
+      }
+
+      // Distribute shapes randomly
+      mesh.position.set(
+        (Math.random() - 0.5) * (isMobile ? 8 : 16),
+        (Math.random() - 0.5) * (isMobile ? 5 : 10),
+        -5 - Math.random() * 8
+      );
+
+      scene.add(mesh);
+
+      shapes.push({
+        mesh,
+        rotSpeedX: (Math.random() - 0.5) * 0.015,
+        rotSpeedY: (Math.random() - 0.5) * 0.015,
+        rotSpeedZ: (Math.random() - 0.5) * 0.015,
+        swimSpeed: 0.5 + Math.random() * 1.2,
+        swimAmp: 0.1 + Math.random() * 0.25,
+        initialY: mesh.position.y
+      });
+    }
+
+    // 7. Particle field (Subtle drifting points of light)
+    const particleCount = isMobile ? 60 : 160;
+    const particleGeom = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+
+    for (let i = 0; i < particleCount; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 24;     // X
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 16; // Y
+      positions[i * 3 + 2] = -12 + Math.random() * 10;   // Z
+    }
+
+    particleGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    // Custom Canvas Texture for beautiful round soft glowing particles
+    const createTexture = () => {
+      const pCanvas = document.createElement('canvas');
+      pCanvas.width = 16;
+      pCanvas.height = 16;
+      const ctx = pCanvas.getContext('2d');
+      if (ctx) {
+        const grad = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
+        grad.addColorStop(0, 'rgba(241, 103, 54, 1.0)');
+        grad.addColorStop(0.3, 'rgba(241, 103, 54, 0.7)');
+        grad.addColorStop(1, 'rgba(241, 103, 54, 0.0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 16, 16);
+      }
+      return new THREE.CanvasTexture(pCanvas);
+    };
+
+    const particleMat = new THREE.PointsMaterial({
+      size: 0.18,
+      map: createTexture(),
+      transparent: true,
+      opacity: 0.75,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+
+    const particles = new THREE.Points(particleGeom, particleMat);
+    scene.add(particles);
+
+    // 8. Dynamic connecting lines between some shapes
+    const numConnections = isMobile ? 3 : 8;
+    const connections: Array<{ shapeA: THREE.Object3D; shapeB: THREE.Object3D }> = [];
+    
+    for (let i = 0; i < numConnections; i++) {
+      const indexA = Math.floor(Math.random() * shapes.length);
+      let indexB = Math.floor(Math.random() * shapes.length);
+      if (indexA === indexB) {
+        indexB = (indexB + 1) % shapes.length;
+      }
+      connections.push({
+        shapeA: shapes[indexA].mesh,
+        shapeB: shapes[indexB].mesh
+      });
+    }
+
+    const linesGeom = new THREE.BufferGeometry();
+    const linesPositions = new Float32Array(numConnections * 2 * 3);
+    linesGeom.setAttribute('position', new THREE.BufferAttribute(linesPositions, 3));
+
+    const linesMat = new THREE.LineBasicMaterial({
+      color: 0xF16736,
+      transparent: true,
+      opacity: 0.3,
+      linewidth: 1
+    });
+
+    const constellationLines = new THREE.LineSegments(linesGeom, linesMat);
+    scene.add(constellationLines);
+
+    // 9. Input & Parallax mouse tracking
+    const mouse = { x: 0, y: 0 };
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isMobile) return;
+      const rect = container.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      mouse.x = x;
+      mouse.y = y;
+    };
+
+    container.addEventListener('mousemove', handleMouseMove);
+
+    // 10. Resize Observer
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width: w, height: h } = entry.contentRect;
+        renderer.setSize(w, h);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      }
+    });
+    resizeObserver.observe(container);
+
+    // 11. Animation Loop
+    let animationFrameId = 0;
+    const clock = new THREE.Clock();
+
+    const animate = () => {
+      animationFrameId = requestAnimationFrame(animate);
+      const elapsedTime = clock.getElapsedTime();
+
+      // Hero core pulse rotation
+      heroGroup.rotation.y += 0.007;
+      heroGroup.rotation.x += 0.003;
+      const pulseScale = 1.0 + Math.sin(elapsedTime * 1.6) * 0.06;
+      heroGroup.scale.setScalar(pulseScale);
+
+      // Rotate and swim floating bodies
+      shapes.forEach((shp) => {
+        shp.mesh.rotation.x += shp.rotSpeedX;
+        shp.mesh.rotation.y += shp.rotSpeedY;
+        shp.mesh.rotation.z += shp.rotSpeedZ;
+        shp.mesh.position.y = shp.initialY + Math.sin(elapsedTime * shp.swimSpeed) * shp.swimAmp;
+      });
+
+      // Drifting particles
+      const partsArr = particleGeom.attributes.position.array as Float32Array;
+      for (let i = 0; i < particleCount; i++) {
+        partsArr[i * 3 + 1] += Math.sin(elapsedTime * 0.2 + i) * 0.001; // subtle float Y
+        partsArr[i * 3] += Math.cos(elapsedTime * 0.2 + i * 2) * 0.0008; // subtle float X
+      }
+      particleGeom.attributes.position.needsUpdate = true;
+
+      // Constellation structure connect updates
+      const lineArray = constellationLines.geometry.attributes.position.array as Float32Array;
+      for (let i = 0; i < connections.length; i++) {
+        const posA = connections[i].shapeA.position;
+        const posB = connections[i].shapeB.position;
+
+        lineArray[i * 6] = posA.x;
+        lineArray[i * 6 + 1] = posA.y;
+        lineArray[i * 6 + 2] = posA.z;
+
+        lineArray[i * 6 + 3] = posB.x;
+        lineArray[i * 6 + 4] = posB.y;
+        lineArray[i * 6 + 5] = posB.z;
+      }
+      constellationLines.geometry.attributes.position.needsUpdate = true;
+
+      // SmoothCamera Interpolation & movement
+      const orbitAng = elapsedTime * 0.055;
+      const basX = Math.sin(orbitAng) * 1.2;
+      const basY = Math.cos(orbitAng * 0.6) * 0.8;
+
+      let targetCamX = basX;
+      let targetCamY = basY;
+
+      if (!isMobile) {
+        targetCamX += mouse.x * 2.2;
+        targetCamY += mouse.y * 1.5;
+      }
+
+      camera.position.x += (targetCamX - camera.position.x) * 0.05;
+      camera.position.y += (targetCamY - camera.position.y) * 0.05;
+      camera.lookAt(0, 0, -2);
+
+      renderer.render(scene, camera);
+    };
+
+    animate();
+
+    // Cleanup resources
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      container.removeEventListener('mousemove', handleMouseMove);
+      resizeObserver.disconnect();
+      
+      // Dispose geometry and materials to free WebGL memory
+      scene.clear();
+      heroGeom.dispose();
+      heroCoreMat.dispose();
+      heroOuterGeom.dispose();
+      heroOuterMat.dispose();
+      particleGeom.dispose();
+      particleMat.dispose();
+      linesGeom.dispose();
+      linesMat.dispose();
+
+      shapes.forEach((shp) => {
+        if (shp.mesh instanceof THREE.Mesh) {
+          shp.mesh.geometry.dispose();
+          if (Array.isArray(shp.mesh.material)) {
+            shp.mesh.material.forEach((m) => m.dispose());
+          } else {
+            shp.mesh.material.dispose();
+          }
+        } else if (shp.mesh instanceof THREE.Group) {
+          shp.mesh.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+              child.geometry.dispose();
+              if (Array.isArray(child.material)) {
+                child.material.forEach((m) => m.dispose());
+              } else {
+                child.material.dispose();
+              }
+            } else if (child instanceof THREE.LineSegments) {
+              child.geometry.dispose();
+              if (Array.isArray(child.material)) {
+                child.material.forEach((m) => m.dispose());
+              } else {
+                child.material.dispose();
+              }
+            }
+          });
+        }
+      });
+
+      renderer.dispose();
+    };
+  }, []);
 
   return (
-    <section className="relative overflow-hidden bg-[#1e1e1e] py-24 md:py-32 text-white">
-      {/* Low-opacity Dot/Grid Pattern Overlay */}
+    <section 
+      ref={containerRef} 
+      className="relative overflow-hidden bg-[#1e1e1e] py-24 md:py-32 text-white flex items-center min-h-[580px]"
+    >
+      {/* Three.js Canvas Element */}
+      <canvas 
+        ref={canvasRef} 
+        className="absolute inset-0 w-full h-full pointer-events-none z-0"
+      />
+
+      {/* Grid Pattern overlay at low opacity */}
       <div 
-        className="absolute inset-0 opacity-[0.06] pointer-events-none" 
+        className="absolute inset-0 opacity-[0.05] pointer-events-none z-1" 
         style={{ 
           backgroundImage: 'radial-gradient(circle, #F16736 1.5px, transparent 1.5px)', 
           backgroundSize: '32px 32px' 
         }} 
       />
-      
-      {/* Intense Orange Glow / Light Bloom behind the main text */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[800px] md:h-[800px] bg-[#F16736]/15 rounded-full blur-[140px] pointer-events-none z-0" />
-      
-      {/* Deep dark space elements / layered depth */}
-      <div className="absolute -top-12 -left-12 w-96 h-96 bg-[#F16736]/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute -bottom-12 -right-12 w-96 h-96 bg-black/40 rounded-full blur-[100px] pointer-events-none" />
 
-      {/* Floating Animated Geometric Shapes (Layered Particles) */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        {/* Diamond frame floating */}
-        <motion.div
-          animate={{
-            y: [0, -25, 0],
-            rotate: [0, 180, 360],
-            opacity: [0.2, 0.45, 0.2]
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute top-1/4 left-[10%] w-5 h-5 border border-[#F16736]/50 rounded-sm"
-        />
-        {/* Floating corner frame accent */}
-        <motion.div
-          animate={{
-            y: [0, 35, 0],
-            x: [0, 15, 0],
-            rotate: [0, -90, 0],
-            opacity: [0.15, 0.35, 0.15]
-          }}
-          transition={{
-            duration: 14,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute bottom-1/4 right-[8%] w-7 h-7 border-t-2 border-r-2 border-[#F16736]/40"
-        />
-        {/* Subtle glowing speck */}
-        <motion.div
-          animate={{
-            scale: [1, 1.4, 1],
-            opacity: [0.3, 0.6, 0.3]
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute top-1/3 right-[18%] w-3 h-3 bg-[#F16736] rounded-full blur-[1.5px]"
-        />
-        {/* Mini dot floating */}
-        <motion.div
-          animate={{
-            y: [0, -60, 0],
-            opacity: [0.15, 0.4, 0.15]
-          }}
-          transition={{
-            duration: 16,
-            repeat: Infinity,
-            delay: 2,
-            ease: "easeInOut"
-          }}
-          className="absolute bottom-16 left-[20%] w-2 h-2 bg-neutral-400 rounded-full"
-        />
-      </div>
+      {/* Intense Orange Glow bloom backdrop */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] md:w-[600px] md:h-[600px] bg-[#F16736]/15 rounded-full blur-[100px] pointer-events-none z-1" />
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="max-w-4xl mx-auto text-center space-y-8">
+      <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
+        <div className="max-w-4xl mx-auto text-center space-y-8 backdrop-blur-[2px] bg-black/25 p-8 rounded-3xl border border-white/5 md:bg-transparent md:border-none md:p-0">
           {/* Intense Top Indicator */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -740,13 +1057,13 @@ const EchelonProjectSection = () => {
           >
             <button
               onClick={() => navigate('/echelon-project-africa/simulation')}
-              className="w-full sm:w-auto px-8 py-4 bg-[#F16736] text-white font-extrabold text-xs md:text-sm uppercase tracking-wider rounded-full hover:shadow-[0_0_30px_rgba(241,103,54,0.5)] hover:scale-[1.03] active:scale-95 transition-all duration-300 cursor-pointer"
+              className="w-full sm:w-auto px-8 py-4 bg-[#F16736] text-white font-extrabold text-xs md:text-sm uppercase tracking-wider rounded-full hover:shadow-[0_0_30px_rgba(241,103,54,0.5)] hover:scale-[1.03] active:scale-95 transition-all duration-300 cursor-pointer text-center"
             >
               Enter the Simulation
             </button>
             <button
               onClick={() => navigate('/echelon-project-africa/tabletop')}
-              className="w-full sm:w-auto px-8 py-4 bg-transparent border-2 border-white/20 hover:border-[#F16736] hover:bg-[#F16736]/10 text-white font-extrabold text-xs md:text-sm uppercase tracking-wider rounded-full transition-all duration-300 cursor-pointer hover:scale-[1.03] active:scale-95"
+              className="w-full sm:w-auto px-8 py-4 bg-transparent border-2 border-white/20 hover:border-[#F16736] hover:bg-[#F16736]/10 text-white font-extrabold text-xs md:text-sm uppercase tracking-wider rounded-full transition-all duration-300 cursor-pointer hover:scale-[1.03] active:scale-95 text-center"
             >
               Explore Tabletop Games
             </button>
