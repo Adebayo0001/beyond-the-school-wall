@@ -3,6 +3,8 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Programs from './pages/Programs';
 import ProgramDetail from './pages/ProgramDetail';
+import TheSkillHut from './pages/TheSkillHut';
+import CashOnCampus from './pages/CashOnCampus';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Portal from './pages/Portal';
@@ -38,6 +40,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/programs" element={<Programs />} />
+        <Route path="/programs/the-skill-hut" element={<TheSkillHut />} />
+        <Route path="/programs/cash-on-campus" element={<CashOnCampus />} />
+        <Route path="/programs/cash-on-campus/detail" element={<ProgramDetail overrideSlug="cash-on-campus" />} />
         <Route path="/programs/:slug" element={<ProgramDetail />} />
         
         {/* Authentication Gateways */}
@@ -78,6 +83,8 @@ export default function App() {
         <Route path="/echelon" element={<EchelonProject />} />
         <Route path="/echelon/brain-game-training" element={<VirtualSimulation />} />
         <Route path="/echelon/tabletop-games" element={<TabletopGames />} />
+        <Route path="/echelon-project-africa/simulation" element={<VirtualSimulation />} />
+        <Route path="/echelon-project-africa/tabletop" element={<TabletopGames />} />
       </Routes>
     </Layout>
   );

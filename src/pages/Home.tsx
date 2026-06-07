@@ -597,12 +597,173 @@ const FinalCTA = () => {
   );
 };
 
+const EchelonProjectSection = () => {
+  const navigate = useNavigate();
+
+  return (
+    <section className="relative overflow-hidden bg-[#1e1e1e] py-24 md:py-32 text-white">
+      {/* Low-opacity Dot/Grid Pattern Overlay */}
+      <div 
+        className="absolute inset-0 opacity-[0.06] pointer-events-none" 
+        style={{ 
+          backgroundImage: 'radial-gradient(circle, #F16736 1.5px, transparent 1.5px)', 
+          backgroundSize: '32px 32px' 
+        }} 
+      />
+      
+      {/* Intense Orange Glow / Light Bloom behind the main text */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[800px] md:h-[800px] bg-[#F16736]/15 rounded-full blur-[140px] pointer-events-none z-0" />
+      
+      {/* Deep dark space elements / layered depth */}
+      <div className="absolute -top-12 -left-12 w-96 h-96 bg-[#F16736]/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute -bottom-12 -right-12 w-96 h-96 bg-black/40 rounded-full blur-[100px] pointer-events-none" />
+
+      {/* Floating Animated Geometric Shapes (Layered Particles) */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        {/* Diamond frame floating */}
+        <motion.div
+          animate={{
+            y: [0, -25, 0],
+            rotate: [0, 180, 360],
+            opacity: [0.2, 0.45, 0.2]
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute top-1/4 left-[10%] w-5 h-5 border border-[#F16736]/50 rounded-sm"
+        />
+        {/* Floating corner frame accent */}
+        <motion.div
+          animate={{
+            y: [0, 35, 0],
+            x: [0, 15, 0],
+            rotate: [0, -90, 0],
+            opacity: [0.15, 0.35, 0.15]
+          }}
+          transition={{
+            duration: 14,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute bottom-1/4 right-[8%] w-7 h-7 border-t-2 border-r-2 border-[#F16736]/40"
+        />
+        {/* Subtle glowing speck */}
+        <motion.div
+          animate={{
+            scale: [1, 1.4, 1],
+            opacity: [0.3, 0.6, 0.3]
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute top-1/3 right-[18%] w-3 h-3 bg-[#F16736] rounded-full blur-[1.5px]"
+        />
+        {/* Mini dot floating */}
+        <motion.div
+          animate={{
+            y: [0, -60, 0],
+            opacity: [0.15, 0.4, 0.15]
+          }}
+          transition={{
+            duration: 16,
+            repeat: Infinity,
+            delay: 2,
+            ease: "easeInOut"
+          }}
+          className="absolute bottom-16 left-[20%] w-2 h-2 bg-neutral-400 rounded-full"
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          {/* Intense Top Indicator */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/60 border border-[#F16736]/30 text-[10px] md:text-sm font-black uppercase tracking-[0.25em] text-[#F16736]"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F16736] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F16736]"></span>
+            </span>
+            COGNITIVE SPORTS & STRATEGIC DIVISION
+          </motion.div>
+
+          {/* Epic Main Headline */}
+          <div className="relative">
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="text-4xl md:text-6xl lg:text-7.5xl font-black tracking-tight leading-none text-white uppercase relative z-10"
+            >
+              The Echelon <span className="text-[#F16736] inline-block relative">Project Africa</span>
+            </motion.h2>
+          </div>
+
+          {/* Punchy Subheading */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-md md:text-xl font-black text-[#F16736] uppercase tracking-[0.08em] max-w-2xl mx-auto"
+          >
+            BTSW's gamified simulation and strategic intelligence division
+          </motion.p>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-zinc-300 text-sm md:text-base leading-relaxed max-w-3xl mx-auto font-medium"
+          >
+            This is where students enter virtual simulations, brain game training, and tabletop strategy experiences designed to sharpen real-world thinking and decision making. Build high-stakes situational awareness, logical game theory execution, and long-range focus filters.
+          </motion.p>
+
+          {/* Side-by-Side Call To Action Buttons (V-Stack on mobile) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4 max-w-md md:max-w-none mx-auto w-full sm:w-auto"
+          >
+            <button
+              onClick={() => navigate('/echelon-project-africa/simulation')}
+              className="w-full sm:w-auto px-8 py-4 bg-[#F16736] text-white font-extrabold text-xs md:text-sm uppercase tracking-wider rounded-full hover:shadow-[0_0_30px_rgba(241,103,54,0.5)] hover:scale-[1.03] active:scale-95 transition-all duration-300 cursor-pointer"
+            >
+              Enter the Simulation
+            </button>
+            <button
+              onClick={() => navigate('/echelon-project-africa/tabletop')}
+              className="w-full sm:w-auto px-8 py-4 bg-transparent border-2 border-white/20 hover:border-[#F16736] hover:bg-[#F16736]/10 text-white font-extrabold text-xs md:text-sm uppercase tracking-wider rounded-full transition-all duration-300 cursor-pointer hover:scale-[1.03] active:scale-95"
+            >
+              Explore Tabletop Games
+            </button>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const Home = () => {
   return (
     <>
       <Hero />
       <Mission />
       <Programs />
+      <EchelonProjectSection />
       <Teasers />
       <Partnership />
       <Testimonials />

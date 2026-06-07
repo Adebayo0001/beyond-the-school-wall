@@ -594,8 +594,9 @@ const CrashChecklist = () => {
 };
 
 
-const ProgramDetail = () => {
-  const { slug } = useParams<{ slug: string }>();
+const ProgramDetail = ({ overrideSlug }: { overrideSlug?: string }) => {
+  const { slug: urlSlug } = useParams<{ slug: string }>();
+  const slug = overrideSlug || urlSlug;
   const [activeWeek, setActiveWeek] = useState<number>(0);
   const [completedModules, setCompletedModules] = useState<number[]>([0]);
 
