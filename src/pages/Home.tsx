@@ -5,20 +5,349 @@ import { ArrowRight, Users } from 'lucide-react';
 import * as THREE from 'three';
 
 const Hero = () => {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const leftTextRef = useRef<HTMLDivElement>(null);
+  const rightCardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Check if mobile (disable Three.js initialization entirely to conserve batteries & maximize speed)
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) return;
+
+    const hero = heroRef.current;
+    const canvas = canvasRef.current;
+    if (!hero || !canvas) return;
+
+    const w = hero.clientWidth;
+    const h = hero.clientHeight;
+
+    // 1. Scene setup
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color('#faf9f7');
+    scene.fog = new THREE.FogExp2('#faf9f7', 0.05);
+
+    // 2. Camera setup facing center
+    const camera = new THREE.PerspectiveCamera(60, w / h, 0.1, 100);
+    camera.position.set(0, 0, 10);
+
+    // 3. High Performance Renderer
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: false,
+      powerPreference: 'high-performance'
+    });
+    renderer.setSize(w, h);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // 4. Lighting parameters
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
+    scene.add(ambientLight);
+
+    const pointLight = new THREE.PointLight(0xF16736, 1.4, 35);
+    pointLight.position.set(0, 0, 8);
+    scene.add(pointLight);
+
+    const dirLight = new THREE.DirectionalLight(0xF16736, 0.6);
+    dirLight.position.set(6, 6, 6);
+    scene.add(dirLight);
+
+    // 5. Warp lines shooting outward from center like a motion trail
+    const streaksCount = 65;
+    const streaks: Array<{
+      line: THREE.Line;
+      dir: THREE.Vector3;
+      speed: number;
+      length: number;
+      distance: number;
+      maxDistance: number;
+    }> = [];
+
+    for (let i = 0; i < streaksCount; i++) {
+      // Outward facing direction relative to center with Z bias
+      const dir = new THREE.Vector3(
+        (Math.random() - 0.5) * 2.8,
+        (Math.random() - 0.5) * 2.8,
+        (Math.random() - 0.25) * 2.0
+      ).normalize();
+
+      const length = 1.0 + Math.random() * 2.5;
+      const distance = Math.random() * 18;
+      const maxDistance = 15 + Math.random() * 6;
+      const speed = 0.05 + Math.random() * 0.12;
+
+      const points = [
+        new THREE.Vector3(0, 0, 0),
+        dir.clone().multiplyScalar(length)
+      ];
+      const streakGeom = new THREE.BufferGeometry().setFromPoints(points);
+      const streakMat = new THREE.LineBasicMaterial({
+        color: 0xF16736,
+        transparent: true,
+        opacity: 0.12 + Math.random() * 0.08,
+        linewidth: 1
+      });
+      const line = new THREE.Line(streakGeom, streakMat);
+      scene.add(line);
+
+      streaks.push({
+        line,
+        dir,
+        speed,
+        length,
+        distance,
+        maxDistance
+      });
+    }
+
+    // 6. Floating flat off-white planes rotating lazily
+    const planes: Array<{
+      mesh: THREE.Mesh;
+      rotSpeedX: number;
+      rotSpeedY: number;
+      swimSpeed: number;
+      swimAmp: number;
+      initialPos: THREE.Vector3;
+    }> = [];
+
+    const numPlanes = 7;
+    for (let i = 0; i < numPlanes; i++) {
+      const pw = 4.0 + Math.random() * 4.0;
+      const ph = 4.0 + Math.random() * 4.0;
+      const pGeom = new THREE.PlaneGeometry(pw, ph);
+
+      const isOrange = Math.random() > 0.45;
+      const color = isOrange ? 0xF16736 : 0xffffff;
+      const opacity = isOrange ? 0.012 : 0.05; // extremely low opacity so it stays subtle
+
+      const pMat = new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity,
+        side: THREE.DoubleSide
+      });
+
+      const mesh = new THREE.Mesh(pGeom, pMat);
+      mesh.position.set(
+        (Math.random() - 0.5) * 20,
+        (Math.random() - 0.5) * 12,
+        -6 - Math.random() * 10
+      );
+      mesh.rotation.set(
+        Math.random() * Math.PI,
+        Math.random() * Math.PI,
+        Math.random() * Math.PI
+      );
+      scene.add(mesh);
+
+      planes.push({
+        mesh,
+        rotSpeedX: (Math.random() - 0.5) * 0.0015,
+        rotSpeedY: (Math.random() - 0.5) * 0.0015,
+        swimSpeed: 0.12 + Math.random() * 0.3,
+        swimAmp: 0.15 + Math.random() * 0.25,
+        initialPos: mesh.position.clone()
+      });
+    }
+
+    // 7. Small glowing orange particles drifting organically
+    const particles: Array<{
+      mesh: THREE.Mesh;
+      velocity: THREE.Vector3;
+      angle: number;
+    }> = [];
+
+    const numParticles = 80;
+    const sphereGeom = new THREE.SphereGeometry(0.06, 6, 6);
+    const sphereMat = new THREE.MeshBasicMaterial({
+      color: 0xF16736,
+      transparent: true,
+      opacity: 0.35
+    });
+
+    for (let i = 0; i < numParticles; i++) {
+      const mesh = new THREE.Mesh(sphereGeom, sphereMat);
+      
+      const r = Math.random() * 4.5;
+      const theta = Math.random() * Math.PI * 2;
+      mesh.position.set(
+        Math.cos(theta) * r,
+        Math.sin(theta) * r,
+        -2 - Math.random() * 6
+      );
+      scene.add(mesh);
+
+      particles.push({
+        mesh,
+        velocity: new THREE.Vector3(
+          (Math.random() - 0.5) * 0.010,
+          (Math.random() - 0.5) * 0.010,
+          (Math.random() - 0.5) * 0.005
+        ),
+        angle: Math.random() * Math.PI * 2
+      });
+    }
+
+    // 8. Custom mouse tracking for parallax
+    const mouse = { x: 0, y: 0 };
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = hero.getBoundingClientRect();
+      const xNorm = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      const yNorm = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      
+      mouse.x = xNorm;
+      mouse.y = yNorm;
+
+      // Text container shift in opposite direction (20% of scene movement speed)
+      const leftText = leftTextRef.current;
+      if (leftText) {
+        leftText.style.transform = `translate(${xNorm * -16}px, ${-yNorm * -16}px)`;
+        leftText.style.transition = 'transform 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
+      }
+
+      // Visual card subtle 3D tilt rotating toward pointer
+      const rightCard = rightCardRef.current;
+      if (rightCard) {
+        const tiltX = -yNorm * 9;
+        const tiltY = xNorm * 9;
+        rightCard.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translate(${xNorm * 10}px, ${yNorm * 10}px)`;
+        rightCard.style.transition = 'transform 0.15s cubic-bezier(0.25, 1, 0.5, 1)';
+      }
+    };
+
+    hero.addEventListener('mousemove', handleMouseMove);
+
+    // Resize tracking
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width: currentW, height: currentH } = entry.contentRect;
+        renderer.setSize(currentW, currentH);
+        camera.aspect = currentW / currentH;
+        camera.updateProjectionMatrix();
+      }
+    });
+    resizeObserver.observe(hero);
+
+    // Animation frames loop
+    const clock = new THREE.Clock();
+    let animFrameId = 0;
+
+    const animate = () => {
+      animFrameId = requestAnimationFrame(animate);
+      const elapsed = clock.getElapsedTime();
+
+      // Update streaks shooting outwards from center
+      streaks.forEach((st) => {
+        st.distance += st.speed;
+        if (st.distance > st.maxDistance) {
+          st.distance = 0.5;
+          const newDir = new THREE.Vector3(
+            (Math.random() - 0.5) * 2.8,
+            (Math.random() - 0.5) * 2.8,
+            (Math.random() - 0.25) * 2.0
+          ).normalize();
+          st.dir.copy(newDir);
+
+          const pts = [
+            new THREE.Vector3(0, 0, 0),
+            newDir.clone().multiplyScalar(st.length)
+          ];
+          st.line.geometry.setFromPoints(pts);
+          st.line.geometry.attributes.position.needsUpdate = true;
+        }
+
+        const curr = st.dir.clone().multiplyScalar(st.distance);
+        st.line.position.copy(curr);
+      });
+
+      // Update planes lazy rotations & floating swim motion
+      planes.forEach((pl) => {
+        pl.mesh.rotation.x += pl.rotSpeedX;
+        pl.mesh.rotation.y += pl.rotSpeedY;
+        pl.mesh.position.y = pl.initialPos.y + Math.sin(elapsed * pl.swimSpeed) * pl.swimAmp;
+      });
+
+      // Update particles organic drift
+      particles.forEach((pt) => {
+        pt.angle += 0.016;
+        pt.mesh.position.x += pt.velocity.x + Math.sin(pt.angle) * 0.002;
+        pt.mesh.position.y += pt.velocity.y + Math.cos(pt.angle * 0.65) * 0.002;
+        pt.mesh.position.z += pt.velocity.z;
+
+        const dist = pt.mesh.position.length();
+        if (dist > 15.0) {
+          pt.mesh.position.set(
+            (Math.random() - 0.5) * 4.5,
+            (Math.random() - 0.5) * 4.5,
+            -2 - Math.random() * 6
+          );
+        }
+      });
+
+      // CAMERA PARALLAX: moves slowly in opposite of cursor to make scene move in direction of cursor
+      const targetCamX = -mouse.x * 1.8;
+      const targetCamY = -mouse.y * 1.3;
+
+      camera.position.x += (targetCamX - camera.position.x) * 0.055;
+      camera.position.y += (targetCamY - camera.position.y) * 0.055;
+      camera.lookAt(0, 0, -3.5);
+
+      renderer.render(scene, camera);
+    };
+
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animFrameId);
+      hero.removeEventListener('mousemove', handleMouseMove);
+      resizeObserver.disconnect();
+
+      // Resource Disposal
+      scene.clear();
+      streaks.forEach((st) => {
+        st.line.geometry.dispose();
+        if (Array.isArray(st.line.material)) {
+          st.line.material.forEach((m) => m.dispose());
+        } else {
+          st.line.material.dispose();
+        }
+      });
+      planes.forEach((pl) => {
+        pl.mesh.geometry.dispose();
+        if (Array.isArray(pl.mesh.material)) {
+          pl.mesh.material.forEach((m) => m.dispose());
+        } else {
+          pl.mesh.material.dispose();
+        }
+      });
+      sphereGeom.dispose();
+      sphereMat.dispose();
+      renderer.dispose();
+    };
+  }, []);
+
   return (
-    <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-white">
+    <section 
+      ref={heroRef}
+      id="home" 
+      className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#faf9f7]"
+    >
       {/* Background Glows and Grids */}
-      <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-[#F16736]/5 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-[#F16736]/5 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #1e1e1e 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+      <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-[#F16736]/5 rounded-full blur-[150px] pointer-events-none z-0" />
+      <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-[#F16736]/5 rounded-full blur-[150px] pointer-events-none z-0" />
+      <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle, #1e1e1e 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+
+      {/* immersive Three.js canvas (hidden on mobile, starts only on desktop) */}
+      <canvas 
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none z-0 hidden md:block"
+      />
 
       <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
         {/* Text Content */}
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+        <div
+          ref={leftTextRef}
           className="z-10"
         >
           {/* Node Connection Line Animation */}
@@ -31,15 +360,25 @@ const Hero = () => {
             <div className="absolute right-0 -top-1 w-2 h-2 rounded-full border border-[#F16736] bg-white animate-ping" />
           </motion.div>
 
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fff1eb] border border-[#F16736]/20 text-[#F16736] text-xs font-bold uppercase tracking-widest mb-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fff1eb] border border-[#F16736]/20 text-[#F16736] text-xs font-bold uppercase tracking-widest mb-6"
+          >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F16736] opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F16736]"></span>
             </span>
             Beyond the School Wall
-          </div>
+          </motion.div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-extrabold leading-[1.05] tracking-tight mb-6 text-[#1e1e1e]">
+          <motion.h1 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.25, ease: 'easeOut' }}
+            className="text-5xl md:text-7xl lg:text-[5.5rem] font-extrabold leading-[1.05] tracking-tight mb-6 text-[#1e1e1e]"
+          >
             Equipping You With What{' '}
             <span className="text-[#F16736] italic relative inline-block">
               School
@@ -47,16 +386,26 @@ const Hero = () => {
                 <path d="M0 10 Q 50 20 100 10" fill="transparent" stroke="currentColor" strokeWidth="4" />
               </svg>
             </span> Won't Teach.
-          </h1>
+          </motion.h1>
 
-          <p className="text-lg md:text-xl text-[#6b6b6b] max-w-xl mb-10 leading-relaxed font-medium">
+          <motion.p 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4, ease: 'easeOut' }}
+            className="text-lg md:text-xl text-[#6b6b6b] max-w-xl mb-10 leading-relaxed font-medium"
+          >
             Raising men for resourcefulness. A digital ecosystem built on{' '}
             <span className="text-[#1e1e1e] font-bold">Creativity</span>,{' '}
             <span className="text-[#1e1e1e] font-bold">Intelligence</span>, and{' '}
             <span className="text-[#1e1e1e] font-bold">Innovation</span>.
-          </p>
+          </motion.p>
 
-          <div className="flex flex-col sm:flex-row gap-4 mb-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.55, ease: 'easeOut' }}
+            className="flex flex-col sm:flex-row gap-4 mb-12"
+          >
             <a 
               href="#join"
               className="group relative px-8 py-4 bg-[#F16736] text-white font-bold rounded-full overflow-hidden transition-all hover:shadow-[0_0_40px_rgba(241,103,54,0.3)] active:scale-95 text-center flex items-center justify-center gap-2"
@@ -66,13 +415,18 @@ const Hero = () => {
               </span>
               <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             </a>
-            <button className="px-8 py-4 bg-transparent text-[#1e1e1e] font-bold rounded-full border border-[#e8e5e0] hover:bg-[#faf9f7] hover:border-[#F16736]/30 transition-all">
+            <button className="px-8 py-4 bg-transparent text-[#1e1e1e] font-bold rounded-full border border-[#e8e5e0] hover:bg-[#faf9f7]/60 hover:border-[#F16736]/30 transition-all">
               Learn More
             </button>
-          </div>
+          </motion.div>
 
           {/* Social Proof */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.7, ease: 'easeOut' }}
+            className="flex flex-col sm:flex-row items-start sm:items-center gap-4"
+          >
             <div className="flex -space-x-3">
               {[1, 2, 3, 4].map((i) => (
                 <div
@@ -98,8 +452,8 @@ const Hero = () => {
               </div>
               <span className="text-xs font-bold text-[#6b6b6b] uppercase tracking-[0.2em] mt-0.5">Resourceful Minds</span>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
         {/* Visual Content */}
         <motion.div
@@ -109,7 +463,10 @@ const Hero = () => {
           transition={{ duration: 1, delay: 0.2 }}
           className="relative hidden lg:block p-8"
         >
-          <div className="relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-[#e8e5e0] shadow-2xl group bg-white p-4">
+          <div 
+            ref={rightCardRef}
+            className="relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-[#e8e5e0] shadow-2xl group bg-white p-4"
+          >
             <div className="relative w-full h-full rounded-[1.5rem] overflow-hidden">
               <img
                 src="https://picsum.photos/seed/climbing/800/1000"
