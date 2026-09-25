@@ -1,8 +1,24 @@
+# Next.js
+.next/
+out/
+
+# Dependencies
 node_modules/
-build/
-dist/
-coverage/
+
+# Environment files
+.env*.local
+.env
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
 .DS_Store
-*.log
-.env*
-!.env.example
+Thumbs.db
+
+# Repos and Backups
+temp_repo/
+beyond-the-school-wall-main/
+*.tsbuildinfo

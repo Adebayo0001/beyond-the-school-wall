@@ -1,0 +1,256 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  
+  /* BTSW Core Brand Colors */
+  --color-primary: #F16736;
+  --color-primary-hover: #e05524;
+  --color-primary-active: #c84618;
+  --color-primary-light: #fff1eb;
+  
+  --color-dark: #1e1e1e;
+  --color-dark-hero: #121212;
+  --color-dark-card: #1a1a1a;
+  
+  --color-white: #ffffff;
+  --color-light-bg: #faf9f7;
+  --color-light-surface: #f5f3ef;
+  
+  --color-orange-tint: #fff1eb;
+  --color-muted: #6b6b6b;
+  --color-border: #e8e5e0;
+
+  /* Aliases for backwards-compatibility */
+  --color-brand-orange: #F16736;
+  --color-brand-dark: #1e1e1e;
+
+  /* Geometric Radii Clamping: Standardize crisp modern corners */
+  --radius-xl: 0.75rem;
+  --radius-2xl: 0.875rem;
+  --radius-3xl: 1rem;
+}
+
+:root {
+  /* Hex and RGB Channel definitions for dynamic opacities */
+  --btsw-primary: #F16736;
+  --btsw-primary-rgb: 241, 103, 54;
+  --btsw-primary-hover: #e05524;
+  --btsw-primary-active: #c84618;
+  --btsw-primary-tint: #fff1eb;
+  --btsw-primary-light: #ffe5db;
+
+  --btsw-dark: #1e1e1e;
+  --btsw-dark-rgb: 30, 30, 30;
+  --btsw-dark-hero: #121212;
+  --btsw-dark-card: #1a1a1a;
+  --btsw-dark-border: #2a2a2a;
+
+  --btsw-bg-white: #ffffff;
+  --btsw-bg-soft: #faf9f7;
+  --btsw-bg-surface: #f5f3ef;
+
+  --btsw-border: #e8e5e0;
+  --btsw-muted: #6b6b6b;
+  --btsw-text-main: #1e1e1e;
+
+  /* Midnight Reference Palette (#ref.jpg) */
+  --btsw-midnight: #0a0e17;
+  --btsw-midnight-surface: #0f1422;
+  --btsw-midnight-card: #141b2d;
+  --btsw-midnight-border: rgba(255, 255, 255, 0.08);
+
+  /* Shadows & Glows */
+  --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.06);
+  --shadow-brand-glow: 0 10px 35px -5px rgba(241, 103, 54, 0.35);
+  --shadow-glow-subtle: 0 0 50px -10px rgba(241, 103, 54, 0.2);
+  --shadow-bento: 0 12px 36px -8px rgba(0, 0, 0, 0.25);
+
+}
+
+/* Base resets & typography */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--btsw-bg-white);
+    color: var(--btsw-dark);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: rgba(241, 103, 54, 0.2);
+    color: #F16736;
+  }
+}
+
+/* Reusable Brand Component Utilities */
+@layer components {
+  /* Brand Buttons: Crisp modern rectangular geometry (rounded-lg / 8px) */
+  .btn-primary {
+    background-color: var(--btsw-primary);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    padding: 0.875rem 1.75rem;
+    border-radius: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 14px 0 rgba(241, 103, 54, 0.25);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--btsw-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(241, 103, 54, 0.35);
+  }
+
+  .btn-primary:active {
+    background-color: var(--btsw-primary-active);
+    transform: translateY(0);
+  }
+
+  .btn-dark {
+    background-color: var(--btsw-dark);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.875rem;
+    padding: 0.875rem 1.75rem;
+    border-radius: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-dark:hover {
+    background-color: var(--btsw-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(241, 103, 54, 0.3);
+  }
+
+  /* Brand Badges */
+  .badge-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    background-color: var(--btsw-primary-tint);
+    border: 1px solid rgba(241, 103, 54, 0.15);
+    color: var(--btsw-primary);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Brand Surfaces (Crisp rounded-xl / 12px) */
+  .card-brand {
+    background-color: var(--btsw-bg-white);
+    border: 1px solid var(--btsw-border);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.25s ease;
+  }
+
+  .card-brand:hover {
+    border-color: rgba(241, 103, 54, 0.3);
+    box-shadow: var(--shadow-card);
+  }
+
+  .card-brand-soft {
+    background-color: var(--btsw-bg-soft);
+    border: 1px solid var(--btsw-border);
+    border-radius: 0.75rem;
+  }
+
+  /* Decorative Glow & Glass */
+  .glow-orange {
+    position: relative;
+  }
+
+  .glow-orange::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(circle, rgba(241, 103, 54, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+    filter: blur(20px);
+  }
+
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(232, 229, 224, 0.8);
+    border-radius: 0.75rem;
+  }
+
+  .glass-dark {
+    background: rgba(14, 20, 34, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+  }
+
+  /* Standardized Feature Cards */
+  .card-arched {
+    border-radius: 0.75rem;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card-arched:hover {
+    transform: translateY(-4px);
+  }
+
+  /* Infinite Marquee Loop for Partner Schools & Tickers */
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 24s linear infinite;
+    will-change: transform;
+  }
+}
+
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #faf9f7;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e8e5e0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #F16736;
+}
