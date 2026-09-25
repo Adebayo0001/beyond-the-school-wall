@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { 
   ArrowRight, Users, Play, ShieldCheck, Coins, Sparkles, 
   Award, CheckCircle2, ChevronRight, ChevronLeft, GraduationCap, Laptop, Star, ArrowUpRight,
-  Bot, Palette, Feather, Mic, Shield, Building2, Calendar, Target, BookOpen, ExternalLink,
+  Bot, Palette, Feather, Mic, Shield, Building2, Calendar, Target, BookOpen,
   Dice5, Gamepad2, Code, Terminal, Film, Check
 } from 'lucide-react';
 
@@ -391,7 +391,7 @@ const Mission = () => {
             transition={{ duration: 0.8 }}
             className="order-2 lg:order-1"
           >
-            <div className="group relative aspect-[4/3] sm:aspect-video rounded-2xl overflow-hidden border border-[#e8e5e0] shadow-2xl">
+            <div className="group relative h-[380px] sm:h-[460px] lg:h-[500px] w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-[#e8e5e0] shadow-xl">
               <Image
                 src="/images/sec_student_lead.jpg"
                 alt="Beyond The School Wall Students in Action"
@@ -400,39 +400,6 @@ const Mission = () => {
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 priority
               />
-              {/* Subtle Dark Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/20" />
-              
-              {/* Floating Content / Play Button */}
-              <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 text-white z-10">
-                <div className="flex items-center gap-4 mb-3">
-                  <a
-                    href="https://www.youtube.com/@beyondtheschoolwall"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#F16736] text-white flex items-center justify-center shadow-lg hover:scale-110 hover:bg-[#e05423] transition-all"
-                    aria-label="Watch BTSW in Action on YouTube"
-                  >
-                    <Play size={22} className="ml-1 fill-white" />
-                  </a>
-                  <div>
-                    <h4 className="text-lg sm:text-xl font-bold tracking-tight text-white drop-shadow-sm">Watch BTSW in Action</h4>
-                    <p className="text-xs sm:text-[13px] text-white/80 font-medium">Over 800+ empowered students</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between pt-3 border-t border-white/15">
-                  <p className="text-xs text-white/70">Bridging academic theory with execution</p>
-                  <a
-                    href="https://www.youtube.com/@beyondtheschoolwall"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#F16736] hover:text-white transition-colors"
-                  >
-                    <span>Watch on YouTube</span>
-                    <ExternalLink size={12} />
-                  </a>
-                </div>
-              </div>
             </div>
           </motion.div>
 
