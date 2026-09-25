@@ -778,11 +778,11 @@ export default function GameRecommendations() {
         </div>
 
         {/* Game Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6">
           {filteredGames.map((game) => (
             <div
               key={game.id}
-              className="bg-white border border-[#e8e5e0] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:border-[#F16736] transition-all flex flex-col justify-between group"
+              className="bg-white border border-[#e8e5e0] rounded-xl overflow-hidden shadow-xs hover:shadow-xl hover:border-[#F16736] transition-all flex flex-col justify-between group"
             >
               {/* Card Visual Header */}
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-900">
@@ -794,50 +794,49 @@ export default function GameRecommendations() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
-                <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                  <span className="px-2 py-0.5 bg-white/95 backdrop-blur-md text-neutral-900 text-[10px] font-black uppercase rounded shadow-xs">
+                <div className="absolute top-2.5 left-2.5 flex items-center gap-1">
+                  <span className="px-1.5 py-0.5 bg-white/95 backdrop-blur-md text-neutral-900 text-[9px] font-black uppercase rounded shadow-xs">
                     {game.genreLabel.split('&')[0]}
                   </span>
                   {game.badge && (
-                    <span className="px-2 py-0.5 bg-[#F16736] text-white text-[9px] font-black uppercase rounded shadow-xs">
+                    <span className="px-1.5 py-0.5 bg-[#F16736] text-white text-[8.5px] font-black uppercase rounded shadow-xs">
                       {game.badge}
                     </span>
                   )}
                 </div>
 
-                <div className="absolute top-3 right-3">
-                  <div className="flex items-center gap-1 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded text-amber-400 text-xs font-bold">
-                    <Star size={10} className="fill-amber-400" />
+                <div className="absolute top-2.5 right-2.5">
+                  <div className="flex items-center gap-0.5 bg-black/60 backdrop-blur-md px-1.5 py-0.5 rounded text-amber-400 text-[10px] font-bold">
+                    <Star size={9} className="fill-amber-400" />
                     <span>{game.rating.toFixed(1)}</span>
-                    <span className="text-[10px] text-neutral-300 font-normal">({game.reviewCount})</span>
                   </div>
                 </div>
 
-                <div className="absolute bottom-3 left-3 right-3 text-white">
-                  <span className="text-[10px] uppercase font-bold text-amber-300 block">
+                <div className="absolute bottom-2.5 left-2.5 right-2.5 text-white">
+                  <span className="text-[9px] uppercase font-bold text-amber-300 block truncate">
                     {game.developer}
                   </span>
-                  <h3 className="text-lg font-black leading-snug drop-shadow-sm">
+                  <h3 className="text-sm font-black leading-snug drop-shadow-sm line-clamp-1">
                     {game.title}
                   </h3>
                 </div>
               </div>
 
               {/* Card Body */}
-              <div className="p-5 space-y-4 flex-1 flex flex-col justify-between">
-                <div className="space-y-3">
-                  <p className="text-xs text-neutral-600 leading-relaxed font-normal">
+              <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
+                <div className="space-y-2.5">
+                  <p className="text-xs text-neutral-600 leading-relaxed font-normal line-clamp-2">
                     {game.tagline}
                   </p>
 
                   {/* Skills Chips */}
-                  <div className="space-y-1.5">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 block">
+                  <div className="space-y-1">
+                    <span className="text-[9px] font-black uppercase tracking-wider text-neutral-400 block">
                       Skills Trained
                     </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {game.skillsTrained.slice(0, 3).map((skill, i) => (
-                        <span key={i} className="px-2 py-0.5 bg-[#faf9f7] border border-[#e8e5e0] text-neutral-700 text-[10px] font-bold rounded-md">
+                    <div className="flex flex-wrap gap-1">
+                      {game.skillsTrained.slice(0, 2).map((skill, i) => (
+                        <span key={i} className="px-1.5 py-0.5 bg-[#faf9f7] border border-[#e8e5e0] text-neutral-700 text-[9.5px] font-bold rounded-md">
                           {skill}
                         </span>
                       ))}
@@ -845,15 +844,15 @@ export default function GameRecommendations() {
                   </div>
 
                   {/* Pricing and Downloads Metadata */}
-                  <div className="flex items-center justify-between text-[11px] text-neutral-500 font-medium pt-1">
-                    <span>{game.priceModel.split('•')[0]}</span>
+                  <div className="flex items-center justify-between text-[10.5px] text-neutral-500 font-medium pt-0.5">
+                    <span className="truncate max-w-[100px]">{game.priceModel.split('•')[0]}</span>
                     <span>{game.downloads}</span>
                   </div>
                 </div>
 
                 {/* Direct Store Download Action Buttons */}
-                <div className="pt-3 border-t border-neutral-100 space-y-2">
-                  <div className="grid grid-cols-2 gap-2">
+                <div className="pt-2.5 border-t border-neutral-100 space-y-1.5">
+                  <div className="grid grid-cols-2 gap-1.5">
                     <a
                       href={game.appStoreUrl}
                       target="_blank"

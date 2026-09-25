@@ -733,8 +733,8 @@ export default function SimulationGames() {
           </div>
         )}
 
-        {/* Game Cards Grid: 16:10 Photographic Cards with Punchy Copy & Breathing Space */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+        {/* Game Cards Grid: 4-Column Photographic Cards with Punchy Copy */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6">
           {filteredCatalogGames.map((game) => (
             <div
               key={game.id}
@@ -755,64 +755,64 @@ export default function SimulationGames() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                   
                   {/* Floating Badges Top */}
-                  <div className="absolute top-3 inset-x-3 flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md bg-white/95 text-neutral-900 shadow-sm truncate">
+                  <div className="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-1.5">
+                    <span className="text-[9.5px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-white/95 text-neutral-900 shadow-sm truncate max-w-[120px]">
                       {game.formatName}
                     </span>
                     
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1 shrink-0">
                       {/* Price Pill */}
                       {game.priceType === 'free' ? (
-                        <span className="px-2 py-0.5 bg-emerald-600 text-white text-[10px] font-black uppercase rounded shadow-xs">
-                          Free Entry
+                        <span className="px-1.5 py-0.5 bg-emerald-600 text-white text-[9.5px] font-black uppercase rounded shadow-xs">
+                          Free
                         </span>
                       ) : (
-                        <span className="px-2 py-0.5 bg-black/80 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase rounded shadow-xs">
+                        <span className="px-1.5 py-0.5 bg-black/80 backdrop-blur-md border border-white/20 text-white text-[9.5px] font-black uppercase rounded shadow-xs">
                           {game.price}
                         </span>
                       )}
 
-                      <div className="flex items-center gap-1 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded text-white text-[11px] font-bold">
-                        <Star size={11} className="fill-amber-400 text-amber-400" />
+                      <div className="flex items-center gap-0.5 bg-black/60 backdrop-blur-md px-1.5 py-0.5 rounded text-white text-[10px] font-bold">
+                        <Star size={10} className="fill-amber-400 text-amber-400" />
                         <span>{game.rating.toFixed(1)}</span>
                       </div>
                     </div>
                   </div>
 
                   {game.badge && (
-                    <div className="absolute bottom-3 left-3">
-                      <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-[#F16736] text-white shadow-xs">
+                    <div className="absolute bottom-2.5 left-2.5">
+                      <span className="text-[8.5px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#F16736] text-white shadow-xs">
                         {game.badge}
                       </span>
                     </div>
                   )}
                 </div>
 
-                {/* Card Content with Generous Breathing Space */}
-                <div className="p-6 space-y-3.5">
+                {/* Card Content */}
+                <div className="p-4 sm:p-4.5 space-y-2.5">
                   <h3 
                     onClick={() => setSelectedGameForModal(game)}
-                    className="text-base font-black text-neutral-900 leading-snug group-hover:text-[#F16736] transition-colors cursor-pointer"
+                    className="text-sm sm:text-base font-black text-neutral-900 leading-snug group-hover:text-[#F16736] transition-colors cursor-pointer line-clamp-2"
                   >
                     {game.title}
                   </h3>
 
                   {/* Start Timing Indicator */}
-                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#F16736] bg-[#fff1eb] border border-[#F16736]/25 px-2.5 py-1.5 rounded-lg">
-                    <Calendar size={12} className="text-[#F16736] shrink-0" />
+                  <div className="flex items-center gap-1 text-[10.5px] font-bold text-[#F16736] bg-[#fff1eb] border border-[#F16736]/25 px-2 py-1 rounded-md">
+                    <Calendar size={11} className="text-[#F16736] shrink-0" />
                     <span className="truncate">{game.startTime}</span>
                   </div>
 
-                  <p className="text-xs text-neutral-600 leading-relaxed font-normal">
+                  <p className="text-xs text-neutral-600 leading-relaxed font-normal line-clamp-2">
                     {game.hook}
                   </p>
 
                   {/* Skills tags */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {game.skills.map((skill, sIdx) => (
+                  <div className="flex flex-wrap gap-1 pt-0.5">
+                    {game.skills.slice(0, 2).map((skill, sIdx) => (
                       <span
                         key={sIdx}
-                        className="text-[10px] font-semibold text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded border border-neutral-200/60"
+                        className="text-[9.5px] font-semibold text-neutral-600 bg-neutral-100 px-1.5 py-0.5 rounded border border-neutral-200/60"
                       >
                         {skill}
                       </span>
@@ -822,47 +822,47 @@ export default function SimulationGames() {
               </div>
 
               {/* Bottom Actions & Meta */}
-              <div className="px-6 pb-6 pt-3 space-y-4 border-t border-neutral-100 mt-2">
-                <div className="grid grid-cols-3 gap-2 text-[11px] text-neutral-600">
+              <div className="px-4 sm:px-4.5 pb-4 sm:pb-4.5 pt-2.5 space-y-3 border-t border-neutral-100 mt-1">
+                <div className="grid grid-cols-3 gap-1.5 text-[10.5px] text-neutral-600">
                   <div className="space-y-0.5">
-                    <span className="text-[9px] font-bold uppercase text-neutral-400 block">Duration</span>
-                    <span className="font-extrabold flex items-center gap-1 text-neutral-800">
-                      <Clock size={11} className="text-[#F16736]" />
+                    <span className="text-[8.5px] font-bold uppercase text-neutral-400 block">Duration</span>
+                    <span className="font-extrabold flex items-center gap-0.5 text-neutral-800 text-[10.5px]">
+                      <Clock size={10} className="text-[#F16736]" />
                       {game.duration}
                     </span>
                   </div>
 
                   <div className="space-y-0.5">
-                    <span className="text-[9px] font-bold uppercase text-neutral-400 block">Squad</span>
-                    <span className="font-extrabold flex items-center gap-1 text-neutral-800">
-                      <Users size={11} className="text-[#F16736]" />
+                    <span className="text-[8.5px] font-bold uppercase text-neutral-400 block">Squad</span>
+                    <span className="font-extrabold flex items-center gap-0.5 text-neutral-800 text-[10.5px]">
+                      <Users size={10} className="text-[#F16736]" />
                       {game.groupSizeLabel.split(' ')[0]}
                     </span>
                   </div>
 
                   <div className="space-y-0.5">
-                    <span className="text-[9px] font-bold uppercase text-neutral-400 block">Division</span>
-                    <span className="font-extrabold text-neutral-800 truncate block">
+                    <span className="text-[8.5px] font-bold uppercase text-neutral-400 block">Division</span>
+                    <span className="font-extrabold text-neutral-800 truncate block text-[10.5px]">
                       {game.ageLabel.split(' ')[0]}
                     </span>
                   </div>
                 </div>
 
-                {/* Dual Action Buttons: Quick View & Register for this game */}
-                <div className="flex items-center gap-2 pt-1">
+                {/* Dual Action Buttons: Quick View & Register */}
+                <div className="flex items-center gap-1.5 pt-1">
                   <button
                     onClick={() => setSelectedGameForModal(game)}
-                    className="flex-1 py-2.5 px-3 bg-white hover:bg-neutral-50 text-neutral-800 border border-[#e8e5e0] hover:border-neutral-300 text-xs font-bold rounded-lg transition-all text-center cursor-pointer"
+                    className="flex-1 py-2 px-2 bg-white hover:bg-neutral-50 text-neutral-800 border border-[#e8e5e0] hover:border-neutral-300 text-[11px] font-bold rounded-lg transition-all text-center cursor-pointer"
                   >
                     Quick View
                   </button>
 
                   <button
                     onClick={() => openRegistration(game)}
-                    className="flex-1 py-2.5 px-3 bg-[#F16736] hover:bg-[#e05423] text-white text-xs font-bold rounded-lg shadow-sm hover:shadow transition-all text-center flex items-center justify-center gap-1 cursor-pointer"
+                    className="flex-1 py-2 px-2 bg-[#F16736] hover:bg-[#e05423] text-white text-[11px] font-bold rounded-lg shadow-xs hover:shadow transition-all text-center flex items-center justify-center gap-1 cursor-pointer"
                   >
-                    <span>Register for this game</span>
-                    <ArrowRight size={12} />
+                    <span>Register</span>
+                    <ArrowRight size={11} />
                   </button>
                 </div>
               </div>

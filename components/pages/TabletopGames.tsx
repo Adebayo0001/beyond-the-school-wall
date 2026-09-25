@@ -292,12 +292,12 @@ export default function TabletopGames() {
           </div>
         </div>
 
-        {/* Clean, Simple 6-Product Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Clean, Simple 4-Column Product Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6">
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="bg-white border border-[#e8e5e0] rounded-lg overflow-hidden shadow-sm hover:shadow-md hover:border-[#F16736]/40 transition-all flex flex-col justify-between group"
+              className="bg-white border border-[#e8e5e0] rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-[#F16736]/40 transition-all flex flex-col justify-between group"
             >
               {/* 1. CLEAN PRODUCT IMAGE - Zero text/badges overlay */}
               <Link
@@ -313,15 +313,15 @@ export default function TabletopGames() {
               </Link>
 
               {/* 2. SIMPLE, CLEAN BODY */}
-              <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                <div className="space-y-2">
+              <div className="p-4 sm:p-4.5 flex-1 flex flex-col justify-between space-y-3.5">
+                <div className="space-y-1.5">
                   
                   {/* Category & Rating */}
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#F16736]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#F16736] truncate pr-1">
                       {product.categoryLabel}
                     </span>
-                    <div className="flex items-center gap-1 text-amber-500 font-semibold text-[11px]">
+                    <div className="flex items-center gap-1 text-amber-500 font-semibold text-[11px] shrink-0">
                       <Star size={11} className="fill-amber-400" />
                       <span>{product.rating.toFixed(1)}</span>
                     </div>
@@ -329,17 +329,17 @@ export default function TabletopGames() {
 
                   {/* Title linking to dedicated product page */}
                   <Link href={`/tabletop-games/${product.id}`} className="block">
-                    <h3 className="text-sm sm:text-base font-semibold text-neutral-900 line-clamp-2 leading-snug">
+                    <h3 className="text-xs sm:text-sm font-bold text-neutral-900 line-clamp-2 leading-snug">
                       {product.title}
                     </h3>
                   </Link>
 
                   {/* Delivery & Availability */}
-                  <div className="flex items-center justify-between pt-1">
-                    <span className="text-[11px] font-medium text-neutral-500 flex items-center gap-1.5">
-                      <Truck size={13} className="text-[#F16736]" /> {product.deliveryTimeline}
+                  <div className="flex items-center justify-between pt-1 text-[11px]">
+                    <span className="font-medium text-neutral-500 flex items-center gap-1">
+                      <Truck size={12} className="text-[#F16736]" /> {product.deliveryTimeline}
                     </span>
-                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    <span className="text-[9.5px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
                       In Stock
                     </span>
                   </div>
@@ -350,9 +350,9 @@ export default function TabletopGames() {
                 <div className="pt-2 border-t border-neutral-100">
                   <button
                     onClick={() => addToCart(product, 1)}
-                    className="w-full py-2.5 px-4 bg-[#F16736] hover:bg-[#e05423] text-white text-xs font-bold rounded-md shadow-xs transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-98"
+                    className="w-full py-2.5 px-3 bg-[#F16736] hover:bg-[#e05423] text-white text-xs font-bold rounded-md shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-98"
                   >
-                    <ShoppingBag size={14} />
+                    <ShoppingBag size={13} />
                     <span>Add to Cart</span>
                   </button>
                 </div>
