@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { 
   ArrowRight, Users, Play, ShieldCheck, Coins, Sparkles, 
   Award, CheckCircle2, ChevronRight, ChevronLeft, GraduationCap, Laptop, Star, ArrowUpRight,
-  Bot, Palette, Feather, Mic, Shield, Building2, Calendar, Target, BookOpen, ExternalLink,
+  Bot, Palette, Feather, Mic, Shield, Building2, Calendar, Target, BookOpen,
   Dice5, Gamepad2, Code, Terminal, Film, Check
 } from 'lucide-react';
 
@@ -391,7 +391,7 @@ const Mission = () => {
             transition={{ duration: 0.8 }}
             className="order-2 lg:order-1"
           >
-            <div className="group relative aspect-[4/3] sm:aspect-video rounded-2xl overflow-hidden border border-[#e8e5e0] shadow-2xl">
+            <div className="group relative h-[380px] sm:h-[460px] lg:h-[500px] w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-[#e8e5e0] shadow-xl">
               <Image
                 src="/images/sec_student_lead.jpg"
                 alt="Beyond The School Wall Students in Action"
@@ -400,39 +400,6 @@ const Mission = () => {
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 priority
               />
-              {/* Subtle Dark Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/20" />
-              
-              {/* Floating Content / Play Button */}
-              <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 text-white z-10">
-                <div className="flex items-center gap-4 mb-3">
-                  <a
-                    href="https://www.youtube.com/@beyondtheschoolwall"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#F16736] text-white flex items-center justify-center shadow-lg hover:scale-110 hover:bg-[#e05423] transition-all"
-                    aria-label="Watch BTSW in Action on YouTube"
-                  >
-                    <Play size={22} className="ml-1 fill-white" />
-                  </a>
-                  <div>
-                    <h4 className="text-lg sm:text-xl font-bold tracking-tight text-white drop-shadow-sm">Watch BTSW in Action</h4>
-                    <p className="text-xs sm:text-[13px] text-white/80 font-medium">Over 800+ empowered students</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between pt-3 border-t border-white/15">
-                  <p className="text-xs text-white/70">Bridging academic theory with execution</p>
-                  <a
-                    href="https://www.youtube.com/@beyondtheschoolwall"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#F16736] hover:text-white transition-colors"
-                  >
-                    <span>Watch on YouTube</span>
-                    <ExternalLink size={12} />
-                  </a>
-                </div>
-              </div>
             </div>
           </motion.div>
 
@@ -539,12 +506,12 @@ const ProjectLuminaBanner = () => {
 // Simulation & Cognitive Games Spotlight (Central Showcase: Lagos Hustle Arena)
 const SimulationSpotlight = () => {
   return (
-    <section className="py-20 sm:py-24 bg-[#faf9f7] text-[#1e1e1e] relative overflow-hidden border-b border-[#e8e5e0]">
+    <section className="py-24 sm:py-32 lg:py-36 bg-[#faf9f7] text-[#1e1e1e] relative overflow-hidden border-b border-[#e8e5e0]">
       <ContourWaves />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14 space-y-3.5">
+        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16 space-y-4">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#1e1e1e] leading-tight">
             Simulations & Strategic Games
           </h2>
@@ -559,54 +526,54 @@ const SimulationSpotlight = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="max-w-5xl mx-auto bg-white border border-[#e8e5e0] hover:border-[#F16736]/40 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 shadow-xl hover:shadow-2xl transition-all duration-300 group"
+          className="w-full bg-white border border-[#e8e5e0] hover:border-[#F16736]/40 rounded-2xl sm:rounded-3xl p-8 sm:p-10 md:p-12 lg:p-14 shadow-xl hover:shadow-2xl transition-all duration-300 group"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
-            {/* Image Showcase (Clean, no text overlay) */}
-            <div className="lg:col-span-6 relative aspect-[16/10] sm:aspect-video rounded-xl sm:rounded-2xl overflow-hidden border border-[#e8e5e0] shadow-md">
+            {/* Image Showcase (Increased Height, Clean) */}
+            <div className="lg:col-span-6 relative h-[340px] sm:h-[400px] lg:h-[460px] w-full rounded-2xl overflow-hidden border border-[#e8e5e0] shadow-md">
               <Image 
                 src="/images/lagos_negotiation.jpg" 
                 alt="Lagos Hustle Commercial Negotiation" 
                 fill 
-                sizes="(max-width: 1024px) 100vw, 500px"
+                sizes="(max-width: 1024px) 100vw, 600px"
                 className="object-cover group-hover:scale-105 transition-transform duration-700" 
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
             </div>
 
-            {/* Content Details (Clean title with no pills) */}
-            <div className="lg:col-span-6 flex flex-col justify-between space-y-5">
+            {/* Content Details */}
+            <div className="lg:col-span-6 flex flex-col justify-between space-y-6 sm:space-y-8">
               <div>
-                <div className="flex items-center gap-2 mb-2.5">
-                  <div className="flex items-center gap-1 text-xs text-amber-500 font-bold">
-                    <Star size={14} className="fill-current" />
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="flex items-center gap-1.5 text-xs sm:text-sm text-amber-500 font-bold">
+                    <Star size={15} className="fill-current" />
                     <span>4.9 (184 reviews)</span>
                   </div>
                 </div>
 
-                <h3 className="text-2xl sm:text-3xl font-black text-[#1e1e1e] group-hover:text-[#F16736] transition-colors leading-snug">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#1e1e1e] group-hover:text-[#F16736] transition-colors leading-snug">
                   Lagos Hustle Arena: Commercial Negotiation
                 </h3>
 
-                <p className="text-sm sm:text-base text-neutral-600 leading-relaxed mt-3">
+                <p className="text-sm sm:text-base md:text-lg text-neutral-600 leading-relaxed mt-4">
                   Face realistic Nigerian distributor actors and dynamic AI dialogue. Defend profit margins and close high-stakes contracts without depleting capital.
                 </p>
               </div>
 
               {/* Metadata & CTAs */}
-              <div className="pt-4 border-t border-[#f0ede8] flex flex-wrap items-center justify-between gap-4">
-                <span className="text-xs sm:text-sm font-semibold text-neutral-500 bg-neutral-100 px-3 py-1 rounded-md">
+              <div className="pt-6 border-t border-[#f0ede8] flex flex-wrap items-center justify-between gap-4">
+                <span className="text-xs sm:text-sm font-semibold text-neutral-500 bg-neutral-100 px-3.5 py-1.5 rounded-lg">
                   45 Minutes
                 </span>
 
                 <div className="flex items-center gap-3">
                   <Link 
                     href="/simulations" 
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#F16736] hover:bg-[#e05423] text-white font-extrabold text-xs uppercase tracking-wider shadow-md shadow-[#F16736]/20 transition-all hover:scale-105 active:scale-95"
+                    className="inline-flex items-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl bg-[#F16736] hover:bg-[#e05423] text-white font-extrabold text-xs uppercase tracking-wider shadow-md shadow-[#F16736]/20 transition-all hover:scale-105 active:scale-95"
                   >
                     <span>Enter Simulation Lab</span>
-                    <ArrowRight size={14} />
+                    <ArrowRight size={15} />
                   </Link>
                 </div>
               </div>
