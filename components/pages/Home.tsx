@@ -526,7 +526,7 @@ const SimulationSpotlight = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="max-w-5xl mx-auto bg-white border border-[#e8e5e0] hover:border-[#F16736]/40 rounded-2xl sm:rounded-3xl p-8 sm:p-10 md:p-12 lg:p-14 shadow-xl hover:shadow-2xl transition-all duration-300 group"
+          className="w-full bg-white border border-[#e8e5e0] hover:border-[#F16736]/40 rounded-2xl sm:rounded-3xl p-8 sm:p-10 md:p-12 lg:p-14 shadow-xl hover:shadow-2xl transition-all duration-300 group"
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
@@ -536,7 +536,7 @@ const SimulationSpotlight = () => {
                 src="/images/lagos_negotiation.jpg" 
                 alt="Lagos Hustle Commercial Negotiation" 
                 fill 
-                sizes="(max-width: 1024px) 100vw, 550px"
+                sizes="(max-width: 1024px) 100vw, 600px"
                 className="object-cover group-hover:scale-105 transition-transform duration-700" 
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
