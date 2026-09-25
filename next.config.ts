@@ -23,8 +23,18 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/virtual-training',
+        destination: '/simulations',
+        permanent: true,
+      },
+      {
+        source: '/simulations/virtual-training',
+        destination: '/simulations',
+        permanent: true,
+      },
+      {
         source: '/echelon/brain-game-training',
-        destination: '/simulations/virtual-training',
+        destination: '/simulations',
         permanent: true,
       },
       {

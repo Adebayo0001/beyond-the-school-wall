@@ -63,7 +63,7 @@ export default function Navbar() {
       name: 'Simulations & Games',
       href: '/simulations',
       dropdown: [
-        { name: 'Virtual simulation training games', href: '/simulations/virtual-training' },
+        { name: 'Virtual simulation training games', href: '/simulations' },
         { name: 'Buy Tabletop or board games', href: '/tabletop-games' },
         { name: 'Game Recommendations for you', href: '/game-recommendations' }
       ]
