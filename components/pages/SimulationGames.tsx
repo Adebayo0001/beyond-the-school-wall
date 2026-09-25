@@ -236,7 +236,7 @@ const ALL_GAMES: SimulationGame[] = [
       'Form non-aggression supply alliances with competing student syndicates.'
     ],
     ctaText: 'Register for this game',
-    ctaLink: '/simulations/virtual-training'
+    ctaLink: '/simulations'
   },
   {
     id: 'director-board-pitch',
@@ -314,7 +314,7 @@ const ALL_GAMES: SimulationGame[] = [
       'Rely on intuitive spatial symmetry for fast geometric puzzle decoding.'
     ],
     ctaText: 'Register for this game',
-    ctaLink: '/simulations/virtual-training'
+    ctaLink: '/simulations'
   },
   {
     id: 'grandmaster-spatial',
@@ -1221,17 +1221,17 @@ export default function SimulationGames() {
               </h5>
               <ul className="space-y-1.5 text-neutral-600">
                 <li>
-                  <Link href="/simulations/virtual-training" className="hover:text-[#F16736] transition-colors">
+                  <Link href="/simulations" className="hover:text-[#F16736] transition-colors">
                     Lagos Hustle Negotiation
                   </Link>
                 </li>
                 <li>
-                  <Link href="/simulations/virtual-training" className="hover:text-[#F16736] transition-colors">
+                  <Link href="/simulations" className="hover:text-[#F16736] transition-colors">
                     Supply Chain Crisis Lab
                   </Link>
                 </li>
                 <li>
-                  <Link href="/simulations/virtual-training" className="hover:text-[#F16736] transition-colors">
+                  <Link href="/simulations" className="hover:text-[#F16736] transition-colors">
                     Neuro-Cognitive Velocity
                   </Link>
                 </li>
@@ -1797,7 +1797,7 @@ export default function SimulationGames() {
                         Done / Browse More Games
                       </button>
                       <Link
-                        href="/simulations/virtual-training"
+                        href="/simulations"
                         onClick={() => setSelectedGameForRegistration(null)}
                         className="w-full sm:w-auto px-6 py-2.5 bg-[#F16736] hover:bg-[#e05423] text-white text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                       >
